@@ -1,9 +1,5 @@
 package opl.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import spoon.processing.AbstractProcessor;
 import spoon.reflect.declaration.CtEnum;
 
 /**
@@ -11,18 +7,10 @@ import spoon.reflect.declaration.CtEnum;
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
-public class EnumsProcessor extends AbstractProcessor<CtEnum<?>> {
-    private List<CtEnum<?>> elements;
-
-    public EnumsProcessor() {
-        this.elements = new ArrayList<CtEnum<?>>();
-    }
-
+public class EnumsProcessor extends DisplayProcessor<CtEnum<?>> {
+    
     public void process(CtEnum<?> element) {
         elements.add(element);
     }
-
-    public List<CtEnum<?>> getElements() {
-        return elements;
-    }
+    
 }

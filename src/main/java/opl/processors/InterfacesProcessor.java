@@ -1,9 +1,5 @@
 package opl.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import spoon.processing.AbstractProcessor;
 import spoon.reflect.declaration.CtInterface;
 
 /**
@@ -11,18 +7,8 @@ import spoon.reflect.declaration.CtInterface;
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
-public class InterfacesProcessor  extends AbstractProcessor<CtInterface<?>> {
-    private List<CtInterface<?>> elements;
-
-    public InterfacesProcessor() {
-        this.elements = new ArrayList<CtInterface<?>>();
-    }
-
+public class InterfacesProcessor  extends DisplayProcessor<CtInterface<?>> {
     public void process(CtInterface<?> element) {
         elements.add(element);
-    }
-
-    public List<CtInterface<?>> getElements() {
-        return elements;
     }
 }

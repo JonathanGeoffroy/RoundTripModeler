@@ -56,9 +56,9 @@ public abstract class UmlFinder {
 
 		/*
 		 * Little Hack here: remove all enumerations contained by classes list
-		 * Reason: CtEnum spoon implementation directly extends from CtClass, So
-		 * when you want to find all CtClass, you also find all CtEnum. FixMe:
-		 * is a better filter exists to find Classes but not interfaces
+		 * Reason: CtEnum spoon implementation directly extends from CtClass,
+		 * So when you want to find all CtClass, you also find all CtEnum.
+		 * FIXME: Does a better filter exist to find Classes but not Enumerations
 		 */
 		classes.removeAll(enums);
 

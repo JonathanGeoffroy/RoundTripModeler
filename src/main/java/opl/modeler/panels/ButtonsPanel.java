@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import opl.modeler.controllers.OnClassAddedListener;
+import opl.modeler.controllers.OnEnumerationAddedListener;
 import opl.modeler.controllers.OnInterfaceAddedListener;
 import opl.modeler.model.Uml;
 
@@ -12,7 +13,10 @@ import opl.modeler.model.Uml;
  * Add buttons to add:
  * <ol>
  * <ul>
- * a new Class to uml, * a new Interface to uml,
+ * a new Class to uml,
+ * </ul>
+ * <ul>
+ * a new Interface to uml,
  * </ul>
  * <ul>
  * a newEnumeration to uml,
@@ -50,10 +54,13 @@ public class ButtonsPanel extends JPanel {
 		JButton addEnumeration = new JButton(ADD_ENUMERATION);
 		JButton addMethod = new JButton(ADD_METHOD);
 
-		addClass.addActionListener(new OnClassAddedListener(uml, ADD_CLASS, ADD_CLASS_MESSAGE));
-		addInterface.addActionListener(new OnInterfaceAddedListener(uml, ADD_INTERFACE, ADD_INTERFACE_MESSAGE));
-		addEnumeration.addActionListener(new OnEnumerationAddedListener(uml, ADD_ENUMERATION, ADD_ENUMERATION_MESSAGE));
-		
+		addClass.addActionListener(new OnClassAddedListener(uml, ADD_CLASS,
+				ADD_CLASS_MESSAGE));
+		addInterface.addActionListener(new OnInterfaceAddedListener(uml,
+				ADD_INTERFACE, ADD_INTERFACE_MESSAGE));
+		addEnumeration.addActionListener(new OnEnumerationAddedListener(uml,
+				ADD_ENUMERATION, ADD_ENUMERATION_MESSAGE));
+
 		BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
 		setLayout(layout);
 

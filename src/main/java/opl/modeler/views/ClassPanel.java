@@ -3,8 +3,6 @@ package opl.modeler.views;
 import java.awt.Graphics;
 
 import spoon.reflect.declaration.CtClass;
-import spoon.reflect.declaration.CtField;
-import spoon.reflect.declaration.CtMethod;
 
 /**
  * Draw a class

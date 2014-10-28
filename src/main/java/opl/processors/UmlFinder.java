@@ -62,7 +62,7 @@ public abstract class UmlFinder {
 		 */
 		classes.removeAll(enums);
 
-		return new Uml(factory, classes, interfaces, enums);
+		return new Uml(spoon, classes, interfaces, enums);
 	}
 
 }

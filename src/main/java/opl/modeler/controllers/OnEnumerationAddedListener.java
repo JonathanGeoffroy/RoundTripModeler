@@ -1,6 +1,5 @@
-package opl.modeler.panels;
+package opl.modeler.controllers;
 
-import opl.modeler.controllers.OnElementAddedListener;
 import opl.modeler.model.Uml;
 
 public class OnEnumerationAddedListener extends OnElementAddedListener {

@@ -35,7 +35,6 @@ public class UmlPanel extends JPanel implements Observer {
 		super();
 
 		setPreferredSize(new Dimension(800, 600));
-
 		cm = new ComponentMover();
 
 		ElementPanel<?> elementPanel;
@@ -66,21 +65,22 @@ public class UmlPanel extends JPanel implements Observer {
 
 	public void update(Observable o, Object arg) {
 		/*
-		 * Argh! Very hugly code! Reason is it exists sereval kinds of Panel:
-		 * ClassPanel, InterfacePanel, EnumPanel, to have differents drawing
+		 * Argh! Very ugly code! Reason is it exists several kinds of Panel:
+		 * ClassPanel, InterfacePanel, EnumPanel, to have different drawing
 		 * behavior. So you have to create a ClassPanel to draw a class, an
-		 * InterfacePanel to draw Interface, EnumPanel to draw Enum. FIXME: how
-		 * to create the good kind of graphical object, by just use CtType arg ?
+		 * InterfacePanel to draw Interface, EnumPanel to draw Enum.
+		 * FIXME: how to create the good kind of graphical object, by just using CtType arg ?
 		 */
 		ElementPanel<?> createdPanel;
-		if (arg instanceof CtClass<?>) {
+		if (arg instanceof CtEnum<?>) {
+			createdPanel = new EnumPanel((CtEnum<?>) arg);
+		} else if (arg instanceof CtClass<?>) {
 			createdPanel = new ClassPanel((CtClass<?>) arg);
 		} else if (arg instanceof CtInterface<?>) {
 			createdPanel = new InterfacePanel((CtInterface<?>) arg);
-		} else if (arg instanceof CtEnum<?>) {
-			createdPanel = new EnumPanel((CtEnum<?>) arg);
-		} else
+		}else {
 			throw new RuntimeException("Cannot cast " + arg.getClass());
+		}
 
 		addPanel(createdPanel);
 		revalidate();

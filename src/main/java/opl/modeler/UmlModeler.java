@@ -27,7 +27,7 @@ public class UmlModeler extends JFrame {
 	public UmlModeler(String title, Uml uml) throws HeadlessException {
 		super(title);
 
-		ButtonsPanel buttonsPanel = new ButtonsPanel(this);
+		ButtonsPanel buttonsPanel = new ButtonsPanel(uml);
 		UMLContentPanel umlContentPanel = new UMLContentPanel(this);
 		UmlPanel umlPanel = new UmlPanel(uml);
 

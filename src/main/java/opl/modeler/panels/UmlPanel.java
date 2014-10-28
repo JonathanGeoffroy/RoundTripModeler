@@ -11,7 +11,11 @@ import javax.swing.JPanel;
 import opl.modeler.model.Uml;
 import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
+import opl.modeler.views.EnumPanel;
+import opl.modeler.views.InterfacePanel;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtEnum;
+import spoon.reflect.declaration.CtInterface;
 
 /**
  * Draw the Uml model of the project<br>
@@ -42,11 +46,25 @@ public class UmlPanel extends JPanel implements Observer {
 		ElementPanel<?> elementPanel;
 		for (CtClass<?> c : uml.getClasses()) {
 			elementPanel = new ClassPanel(c);
-			elementPanel.setPreferredSize(new Dimension(100, 100));
-			umlPanels.add(elementPanel);
-			this.add(elementPanel);
-			cm.registerComponent(elementPanel);
+			addPanel(elementPanel, cm);
 		}
+		
+		for (CtInterface<?> i : uml.getInterfaces()) {
+			elementPanel = new InterfacePanel(i);
+			addPanel(elementPanel, cm);
+		}
+		
+		for (CtEnum<?> e : uml.getEnumerations()) {
+			elementPanel = new EnumPanel(e);
+			addPanel(elementPanel, cm);
+		}
+	}
+
+	private void addPanel(ElementPanel<?> elementPanel, ComponentMover cm) {
+		elementPanel.setPreferredSize(new Dimension(100, 100));
+		umlPanels.add(elementPanel);
+		this.add(elementPanel);
+		cm.registerComponent(elementPanel);
 	}
 
 	public void update(Observable o, Object arg) {

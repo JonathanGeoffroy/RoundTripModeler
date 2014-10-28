@@ -14,7 +14,7 @@ import opl.processors.UmlFinder;
  */
 public class App {
 	public static void main(String[] args) throws Exception {
-		Uml uml = UmlFinder.runSpoonProcessors("src/main/java");
+		Uml uml = UmlFinder.runSpoonProcessors("src/test/resources/TestProject/src/");
 		new UmlModeler("Round Trip Modeling", uml).setVisible(true);
 	}
 }

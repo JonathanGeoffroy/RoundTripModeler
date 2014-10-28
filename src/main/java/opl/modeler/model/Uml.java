@@ -19,10 +19,19 @@ import spoon.reflect.declaration.CtInterface;
  *
  */
 public class Uml extends Observable {
-
+	/**
+	 * All classes of the analyzed project
+	 */
 	private List<CtClass<?>> classes;
 
+	/**
+	 * All interfaces of the analyzed project
+	 */
 	private List<CtInterface<?>> interfaces;
+
+	/**
+	 * All enumerations of the analyzed project
+	 */
 	private List<CtEnum<?>> enumerations;
 
 	public Uml(List<CtClass<?>> classes, List<CtInterface<?>> interfaces,

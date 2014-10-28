@@ -1,6 +1,10 @@
 package opl.modeler.views;
 
+import java.awt.Graphics;
+
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtMethod;
 
 /**
  * Draw a class
@@ -9,14 +13,26 @@ import spoon.reflect.declaration.CtClass;
  *
  */
 public class ClassPanel extends ElementPanel<CtClass<?>> {
-
-	public ClassPanel(CtClass<?> ctClass) {
-		super(ctClass);
-	}
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2521875871223935514L;
+	
+	public ClassPanel(CtClass<?> ctClass) {
+		super(ctClass);
+	}
 
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		drawRectangle(g);
+		drawName(g);
+		drawFields(g);
+		drawMethods(g);
+		
+		this.setSize(width, height);
+	}
+
+	
 }

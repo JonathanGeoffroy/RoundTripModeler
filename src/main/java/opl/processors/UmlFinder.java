@@ -1,6 +1,5 @@
 package opl.processors;
 
-import java.io.File;
 import java.util.List;
 
 import opl.modeler.model.Uml;
@@ -11,7 +10,6 @@ import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
 import spoon.reflect.factory.Factory;
 import spoon.support.QueueProcessingManager;
-import spoon.support.compiler.FileSystemFolder;
 
 /**
  * Run Spoon library to find all CtType (i.e. classes, interfaces, enumerations)
@@ -31,11 +29,7 @@ public abstract class UmlFinder {
 	 * @throws Exception
 	 *             Spoon exceptions
 	 */
-	public static Uml runSpoonProcessors(String projectPath) throws Exception {
-		// Create spoon factory instance
-		Launcher spoon = new Launcher();
-		spoon.addInputResource(new FileSystemFolder(new File(projectPath)));
-		spoon.run();
+	public static void runSpoonProcessors(Launcher spoon, Uml uml) throws Exception {
 		Factory factory = spoon.getFactory();
 
 		// Create a queue containing all processors to run
@@ -61,8 +55,11 @@ public abstract class UmlFinder {
 		 * FIXME: Does a better filter exist to find Classes but not Enumerations
 		 */
 		classes.removeAll(enums);
-
-		return new Uml(spoon, classes, interfaces, enums);
+		
+		uml.setClasses(classes);
+		uml.setInterfaces(interfaces);
+		uml.setEnumerations(enums);
+		uml.onCodeReloaded();
 	}
 
 }

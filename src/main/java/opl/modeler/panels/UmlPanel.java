@@ -1,8 +1,6 @@
 package opl.modeler.panels;
 
 import java.awt.Dimension;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JPanel;
 
@@ -11,6 +9,7 @@ import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
 import opl.modeler.views.EnumPanel;
 import opl.modeler.views.InterfacePanel;
+import opl.observer.Observer;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
@@ -30,13 +29,28 @@ public class UmlPanel extends JPanel implements Observer {
 	 */
 	private static final long serialVersionUID = 1386070124268041527L;
 	private ComponentMover cm;
-
+	private Uml uml;
+	
 	public UmlPanel(Uml uml) {
 		super();
-
+		this.uml = uml;
+		
 		setPreferredSize(new Dimension(800, 600));
-		cm = new ComponentMover();
 
+		addAllPanels();
+
+		// Attach this panel to Uml model
+		uml.addObserver(this);
+	}
+
+	private void addPanel(ElementPanel<?> elementPanel) {
+		elementPanel.setPreferredSize(new Dimension(100, 100));
+		this.add(elementPanel);
+		cm.registerComponent(elementPanel);
+	}
+
+	private void addAllPanels() {
+		cm = new ComponentMover();
 		ElementPanel<?> elementPanel;
 		for (CtClass<?> c : uml.getClasses()) {
 			elementPanel = new ClassPanel(c);
@@ -52,37 +66,32 @@ public class UmlPanel extends JPanel implements Observer {
 			elementPanel = new EnumPanel(e);
 			addPanel(elementPanel);
 		}
-
-		// Attach this panel to Uml model
-		uml.addObserver(this);
 	}
-
-	private void addPanel(ElementPanel<?> elementPanel) {
-		elementPanel.setPreferredSize(new Dimension(100, 100));
-		this.add(elementPanel);
-		cm.registerComponent(elementPanel);
-	}
-
-	public void update(Observable o, Object arg) {
-		/*
-		 * Argh! Very ugly code! Reason is it exists several kinds of Panel:
-		 * ClassPanel, InterfacePanel, EnumPanel, to have different drawing
-		 * behavior. So you have to create a ClassPanel to draw a class, an
-		 * InterfacePanel to draw Interface, EnumPanel to draw Enum.
-		 * FIXME: how to create the good kind of graphical object, by just using CtType arg ?
-		 */
-		ElementPanel<?> createdPanel;
-		if (arg instanceof CtEnum<?>) {
-			createdPanel = new EnumPanel((CtEnum<?>) arg);
-		} else if (arg instanceof CtClass<?>) {
-			createdPanel = new ClassPanel((CtClass<?>) arg);
-		} else if (arg instanceof CtInterface<?>) {
-			createdPanel = new InterfacePanel((CtInterface<?>) arg);
-		}else {
-			throw new RuntimeException("Cannot cast " + arg.getClass());
-		}
-
+	
+	public void onClassAdded(CtClass<?> ctClass) {
+		ElementPanel<?> createdPanel = new ClassPanel(ctClass);
 		addPanel(createdPanel);
+		revalidate();
+		repaint();
+	}
+
+	public void onInterfaceAdded(CtInterface<?> ctInterface) {
+		ElementPanel<?> createdPanel = new InterfacePanel(ctInterface);
+		addPanel(createdPanel);
+		revalidate();
+		repaint();
+	}
+
+	public void onEnumAdded(CtEnum<?> ctEnum) {
+		ElementPanel<?> createdPanel = new EnumPanel(ctEnum);
+		addPanel(createdPanel);
+		revalidate();
+		repaint();
+	}
+
+	public void onCodeReloaded() {
+		this.removeAll();
+		addAllPanels();
 		revalidate();
 		repaint();
 	}

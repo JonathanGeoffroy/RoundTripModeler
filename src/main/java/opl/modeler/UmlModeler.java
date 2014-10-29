@@ -10,6 +10,7 @@ import opl.modeler.model.Uml;
 import opl.modeler.panels.ButtonsPanel;
 import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
+import spoon.Launcher;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -24,10 +25,10 @@ public class UmlModeler extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public UmlModeler(String title, Uml uml) throws HeadlessException {
+	public UmlModeler(String title, Launcher spoon, Uml uml) throws HeadlessException {
 		super(title);
 
-		ButtonsPanel buttonsPanel = new ButtonsPanel(uml);
+		ButtonsPanel buttonsPanel = new ButtonsPanel(spoon, uml);
 		UMLContentPanel umlContentPanel = new UMLContentPanel(this);
 		UmlPanel umlPanel = new UmlPanel(uml);
 

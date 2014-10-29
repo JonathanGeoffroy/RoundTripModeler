@@ -1,13 +1,13 @@
 package opl.modeler.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
+import opl.observer.Observable;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
-import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.EnumFactory;
 import spoon.reflect.factory.InterfaceFactory;
 
@@ -54,6 +54,13 @@ public class Uml extends Observable {
 	 */
 	private Launcher spoon;
 
+	public Uml(Launcher spoon) {
+		this.spoon = spoon;
+		classes = new ArrayList<CtClass<?>>();
+		interfaces = new ArrayList<CtInterface<?>>();
+		enumerations = new ArrayList<CtEnum<?>>();
+	}
+	
 	public Uml(Launcher spoon, List<CtClass<?>> classes, List<CtInterface<?>> interfaces,
 			List<CtEnum<?>> enumerations) {
 		this.spoon = spoon;
@@ -73,7 +80,8 @@ public class Uml extends Observable {
 	public void addClass(String qualifiedName) throws Exception {
 		CtClass<?> createdClass = spoon.getFactory().Class().create(qualifiedName);
 		classes.add(createdClass);
-		notifyDataCreated(createdClass);
+		spoon.run();
+		notifyClassAdded(createdClass);
 	}
 
 	/**
@@ -87,7 +95,8 @@ public class Uml extends Observable {
 	public void addInterface(String qualifiedName) throws Exception {
 		CtInterface<?> createdInterface = new InterfaceFactory(spoon.getFactory()).create(qualifiedName);
 		interfaces.add(createdInterface);
-		notifyDataCreated(createdInterface);
+		spoon.run();
+		notifyInterfaceAdded(createdInterface);
 	}
 
 	/**
@@ -100,24 +109,7 @@ public class Uml extends Observable {
 	public void addEnumeration(String qualifiedName) throws Exception {
 		CtEnum<?> createdEnumeration = new EnumFactory(spoon.getFactory()).create(qualifiedName);
 		enumerations.add(createdEnumeration);
-		notifyDataCreated(createdEnumeration);		
-	}
-
-	/**
-	 * Notify that the model changed
-	 * <p>
-	 * Call all observers of this Observable class<br>
-	 * Send the created element to observers<br>
-	 * run spoon to recreate source code of the project
-	 * </p>
-	 * 
-	 * @param createdType
-	 * @throws Exception 
-	 */
-	private void notifyDataCreated(CtType<?> createdType) throws Exception {
-		setChanged();
-		notifyObservers(createdType);
-		spoon.run();
+		notifyEnumAdded(createdEnumeration);
 	}
 	
 	public List<CtClass<?>> getClasses() {
@@ -130,5 +122,17 @@ public class Uml extends Observable {
 
 	public List<CtEnum<?>> getEnumerations() {
 		return enumerations;
+	}
+
+	public void setClasses(List<CtClass<?>> classes) {
+		this.classes = classes;
+	}
+
+	public void setInterfaces(List<CtInterface<?>> interfaces) {
+		this.interfaces = interfaces;
+	}
+
+	public void setEnumerations(List<CtEnum<?>> enumerations) {
+		this.enumerations = enumerations;
 	}
 }

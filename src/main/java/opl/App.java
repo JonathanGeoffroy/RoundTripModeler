@@ -1,8 +1,12 @@
 package opl;
 
+import java.io.File;
+
 import opl.modeler.UmlModeler;
 import opl.modeler.model.Uml;
 import opl.processors.UmlFinder;
+import spoon.Launcher;
+import spoon.support.compiler.FileSystemFolder;
 
 /**
  * Entry Point of the software<br>
@@ -14,7 +18,15 @@ import opl.processors.UmlFinder;
  */
 public class App {
 	public static void main(String[] args) throws Exception {
-		Uml uml = UmlFinder.runSpoonProcessors("src/test/resources/TestProject/src/");
-		new UmlModeler("Round Trip Modeling", uml).setVisible(true);
+		String projectPath = "src/test/resources/TestProject/src/";
+		
+		// Create spoon factory instance
+		Launcher spoon = new Launcher();
+		spoon.addInputResource(new FileSystemFolder(new File(projectPath)));
+		spoon.run();
+		Uml uml = new Uml(spoon);
+		
+		UmlFinder.runSpoonProcessors(spoon, uml);
+		new UmlModeler("Round Trip Modeling", spoon, uml).setVisible(true);
 	}
 }

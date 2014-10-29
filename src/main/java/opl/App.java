@@ -18,15 +18,31 @@ import spoon.support.compiler.FileSystemFolder;
  */
 public class App {
 	public static void main(String[] args) throws Exception {
-		String projectPath = "src/test/resources/TestProject/src/";
+		if(args.length == 0) {
+			usage();
+		}
+		String projectPath = args[0];
 		
-		// Create spoon factory instance
+		// Create spoon instance
 		Launcher spoon = new Launcher();
+		
+		// Change the spoon output directory: use the analyzed project
+		String[] setOutput = {"-o", projectPath};
+		spoon.setArgs(setOutput);
 		spoon.addInputResource(new FileSystemFolder(new File(projectPath)));
 		spoon.run();
-		Uml uml = new Uml(spoon);
 		
+		// Load the project into spoon
+		Uml uml = new Uml(spoon);
 		UmlFinder.runSpoonProcessors(spoon, uml);
 		new UmlModeler("Round Trip Modeling", spoon, uml).setVisible(true);
+	}
+
+	/**
+	 * Print the software usage and exit
+	 */
+	private static void usage() {
+		System.out.println("usage: java -jar RoundTripModel <projectName>");
+		System.exit(-1); // Exit error
 	}
 }

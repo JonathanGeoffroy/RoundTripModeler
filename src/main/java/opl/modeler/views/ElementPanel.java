@@ -1,5 +1,6 @@
 package opl.modeler.views;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -21,8 +22,17 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 	 */
 	private static final long serialVersionUID = 3864276811483965605L;
 	protected static final int HEIGHT_BEFORE_ELEMENT_NAME = 40;
+	
+	/**
+	 * The element to draw
+	 */
 	protected T ctElement;
 
+	/**
+	 * True if the element is selected by user in uml diagram
+	 */
+	protected boolean selected;
+	
 	/**
 	 * The current width of the component
 	 */
@@ -45,7 +55,13 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 	 *            GUI Graphics
 	 */
 	protected void drawRectangle(Graphics g) {
+		if(selected) {
+			g.setColor(Color.BLUE);
+		}
 		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+		if(selected) {
+			g.setColor(Color.BLACK);
+		}
 	}
 
 	/**
@@ -100,5 +116,13 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 			g.drawString(methodStr, 0, height);
 			height += 20;
 		}
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

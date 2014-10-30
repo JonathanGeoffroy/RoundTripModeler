@@ -1,6 +1,9 @@
 package opl.modeler.panels;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
@@ -30,11 +33,12 @@ public class UmlPanel extends JPanel implements Observer {
 	private static final long serialVersionUID = 1386070124268041527L;
 	private ComponentMover cm;
 	private Uml uml;
+	private ElementPanel<?> selected;
 	
 	public UmlPanel(Uml uml) {
 		super();
 		this.uml = uml;
-		
+		this.setLayout(null);
 		setPreferredSize(new Dimension(800, 600));
 
 		addAllPanels();
@@ -50,20 +54,23 @@ public class UmlPanel extends JPanel implements Observer {
 	}
 
 	private void addAllPanels() {
-		cm = new ComponentMover();
+		cm = new ComponentMover(this);
 		ElementPanel<?> elementPanel;
 		for (CtClass<?> c : uml.getClasses()) {
 			elementPanel = new ClassPanel(c);
+			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 
 		for (CtInterface<?> i : uml.getInterfaces()) {
 			elementPanel = new InterfacePanel(i);
+			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 
 		for (CtEnum<?> e : uml.getEnumerations()) {
 			elementPanel = new EnumPanel(e);
+			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 	}
@@ -92,6 +99,16 @@ public class UmlPanel extends JPanel implements Observer {
 	public void onCodeReloaded() {
 		this.removeAll();
 		addAllPanels();
+		revalidate();
+		repaint();
+	}
+
+	public void notifySelectionChanged(Component source) {
+		if(selected != null) {
+			selected.setSelected(false);
+		}
+		selected = (ElementPanel<?>)source;
+		selected.setSelected(true);
 		revalidate();
 		repaint();
 	}

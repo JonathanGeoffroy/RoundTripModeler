@@ -27,11 +27,13 @@ public class ComponentMover extends MouseAdapter {
 	private boolean changeCursor = true;
 	private boolean autoLayout = false;
 
+	private UmlPanel parent;
+	
 	private Class destinationClass;
 	private Component destinationComponent;
 	private Component destination;
 	private Component source;
-
+	
 	private Point pressed;
 	private Point location;
 
@@ -43,41 +45,10 @@ public class ComponentMover extends MouseAdapter {
 	 * Constructor for moving individual components. The components must be
 	 * regisetered using the registerComponent() method.
 	 */
-	public ComponentMover() {
+	public ComponentMover(UmlPanel parent) {
+		this.parent = parent;
 	}
-
-	/**
-	 * Constructor to specify a Class of Component that will be moved when drag
-	 * events are generated on a registered child component. The events will be
-	 * passed to the first ancestor of this specified class.
-	 *
-	 * @param destinationClass
-	 *            the Class of the ancestor component
-	 * @param components
-	 *            the Components to be registered for forwarding drag events to
-	 *            the ancestor Component.
-	 */
-	public ComponentMover(Class destinationClass, Component... components) {
-		this.destinationClass = destinationClass;
-		registerComponent(components);
-	}
-
-	/**
-	 * Constructor to specify a parent component that will be moved when drag
-	 * events are generated on a registered child component.
-	 *
-	 * @param destinationComponent
-	 *            the component drage events should be forwareded to
-	 * @param components
-	 *            the Components to be registered for forwarding drag events to
-	 *            the parent component to be moved
-	 */
-	public ComponentMover(Component destinationComponent,
-			Component... components) {
-		this.destinationComponent = destinationComponent;
-		registerComponent(components);
-	}
-
+	
 	/**
 	 * Get the auto layout property
 	 *
@@ -212,6 +183,7 @@ public class ComponentMover extends MouseAdapter {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		source = e.getComponent();
+		parent.notifySelectionChanged(source);
 		int width = source.getSize().width - dragInsets.left - dragInsets.right;
 		int height = source.getSize().height - dragInsets.top
 				- dragInsets.bottom;

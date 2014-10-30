@@ -1,5 +1,5 @@
 package test;
 
-public interface InterfaceInOtherPackage {
 
-}
+public interface InterfaceInOtherPackage {}
+

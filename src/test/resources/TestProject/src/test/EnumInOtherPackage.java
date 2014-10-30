@@ -1,5 +1,6 @@
 package test;
 
-public enum EnumInOtherPackage {
 
+public enum EnumInOtherPackage {
 }
+

@@ -1,9 +1,19 @@
 package opl.modeler.panels;
 
-import opl.modeler.UmlModeler;
+import java.awt.Dimension;
+import java.awt.Label;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import opl.modeler.UmlModeler;
+import opl.modeler.controllers.OnFieldAddedListener;
+import opl.modeler.views.ElementPanel;
+import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtType;
 
 /**
  * A JPanel able to show name, attributes and methods of the selected class of
@@ -17,24 +27,41 @@ public class UMLContentPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -967498044236816796L;
+	private UmlModeler modeler;
 
-	public UMLContentPanel(UmlModeler umlModeler) {
+	public UMLContentPanel(UmlModeler modeler) {
+		this.modeler = modeler;
 		setPreferredSize(new Dimension(200, 600));
+	}
 
+	public void notifySelectionChanged(ElementPanel<?> selected) {
+		drawElementPanel(selected);
+	}
+
+	private void drawElementPanel(ElementPanel<?> selected) {
+		this.removeAll();
+		CtType<?> selectedCtType = selected.getCtElement();
+		
 		JTextField name = new JTextField();
 		name.setPreferredSize(new Dimension(200, 20));
-
+		name.setText(selectedCtType.getSimpleName());
+		
 		JPanel attributes = new JPanel();
 		BoxLayout attrsLayout = new BoxLayout(attributes, BoxLayout.Y_AXIS);
 		attributes.setLayout(attrsLayout);
-		attributes.add(new JLabel("attr 1"));
-		attributes.add(new JLabel("attr 2"));
-
+		for(CtField<?> field : selectedCtType.getFields()) {
+			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+		}
+		JButton addFieldButton = new JButton("Add Field");
+		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
+		attributes.add(addFieldButton);
+		
 		JPanel methods = new JPanel();
 		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
 		methods.setLayout(methodsLayout);
-		methods.add(new JLabel("method 1"));
-		methods.add(new JLabel("method 2"));
+		for(CtMethod<?> method : selectedCtType.getMethods()) {
+			attributes.add(new Label(method.getSignature()));
+		}
 
 		JPanel components = new JPanel();
 		BoxLayout componentsLayout = new BoxLayout(components, BoxLayout.Y_AXIS);
@@ -44,5 +71,8 @@ public class UMLContentPanel extends JPanel {
 
 		this.add(name);
 		this.add(components);
+		
+		revalidate();
+		repaint();
 	}
 }

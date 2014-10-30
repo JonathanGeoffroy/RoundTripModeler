@@ -1,24 +1,32 @@
 package opl.modeler.panels;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.JComponent;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.SwingUtilities;
 
+import opl.modeler.UmlModeler;
+import opl.modeler.views.ElementPanel;
+
 /**
- * This class allows you to move a Component by using a mouse. The Component
+ * This class allows you to move a ElementPanel by using a mouse. The ElementPanel
  * moved can be a high level Window (ie. Window, Frame, Dialog) in which case
- * the Window is moved within the desktop. Or the Component can belong to a
- * Container in which case the Component is moved within the Container.
+ * the Window is moved within the desktop. Or the ElementPanel can belong to a
+ * Container in which case the ElementPanel is moved within the Container.
  *
- * When moving a Window, the listener can be added to a child Component of the
+ * When moving a Window, the listener can be added to a child ElementPanel of the
  * Window. In this case attempting to move the child will result in the Window
  * moving. For example, you might create a custom "Title Bar" for an undecorated
  * Window and moving of the Window is accomplished by moving the title bar only.
  * Multiple components can be registered as "window movers".
  *
- * Components can be registered when the class is created. Additional components
- * can be added at any time using the registerComponent() method.
+ * ElementPanels can be registered when the class is created. Additional components
+ * can be added at any time using the registerElementPanel() method.
  */
 public class ComponentMover extends MouseAdapter {
 	private Insets dragInsets = new Insets(0, 0, 0, 0);
@@ -27,12 +35,12 @@ public class ComponentMover extends MouseAdapter {
 	private boolean changeCursor = true;
 	private boolean autoLayout = false;
 
-	private UmlPanel parent;
+	private UmlModeler modeler;
 	
-	private Class destinationClass;
-	private Component destinationComponent;
-	private Component destination;
-	private Component source;
+	private Class<?> destinationClass;
+	private ElementPanel<?> destinationElementPanel;
+	private ElementPanel<?> destination;
+	private ElementPanel<?> source;
 	
 	private Point pressed;
 	private Point location;
@@ -43,10 +51,10 @@ public class ComponentMover extends MouseAdapter {
 
 	/**
 	 * Constructor for moving individual components. The components must be
-	 * regisetered using the registerComponent() method.
+	 * regisetered using the registerElementPanel() method.
 	 */
-	public ComponentMover(UmlPanel parent) {
-		this.parent = parent;
+	public ComponentMover(UmlModeler modeler) {
+		this.modeler = modeler;
 	}
 	
 	/**
@@ -136,8 +144,8 @@ public class ComponentMover extends MouseAdapter {
 	 * @param components
 	 *            the component the listeners are removed from
 	 */
-	public void deregisterComponent(Component... components) {
-		for (Component component : components)
+	public void deregisterComponent(ElementPanel<?>... components) {
+		for (ElementPanel<?> component : components)
 			component.removeMouseListener(this);
 	}
 
@@ -147,8 +155,8 @@ public class ComponentMover extends MouseAdapter {
 	 * @param components
 	 *            the component the listeners are added to
 	 */
-	public void registerComponent(Component... components) {
-		for (Component component : components)
+	public void registerComponent(ElementPanel<?>... components) {
+		for (ElementPanel<?> component : components)
 			component.addMouseListener(this);
 	}
 
@@ -182,8 +190,8 @@ public class ComponentMover extends MouseAdapter {
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		source = e.getComponent();
-		parent.notifySelectionChanged(source);
+		source = (ElementPanel<?>) e.getComponent();
+		modeler.notifySelectionChanged(source);
 		int width = source.getSize().width - dragInsets.left - dragInsets.right;
 		int height = source.getSize().height - dragInsets.top
 				- dragInsets.bottom;
@@ -200,13 +208,13 @@ public class ComponentMover extends MouseAdapter {
 
 		// Determine the component that will ultimately be moved
 
-		if (destinationComponent != null) {
-			destination = destinationComponent;
+		if (destinationElementPanel != null) {
+			destination = destinationElementPanel;
 		} else if (destinationClass == null) {
 			destination = source;
 		} else // forward events to destination component
 		{
-			destination = SwingUtilities.getAncestorOfClass(destinationClass,
+			destination = (ElementPanel<?>) SwingUtilities.getAncestorOfClass(destinationClass,
 					source);
 		}
 
@@ -221,8 +229,8 @@ public class ComponentMover extends MouseAdapter {
 		// Making sure autoscrolls is false will allow for smoother dragging of
 		// individual components
 
-		if (destination instanceof JComponent) {
-			JComponent jc = (JComponent) destination;
+		if (destination instanceof ElementPanel<?>) {
+			ElementPanel<?> jc = (ElementPanel<?>) destination;
 			autoscrolls = jc.getAutoscrolls();
 			jc.setAutoscrolls(false);
 		}
@@ -280,19 +288,12 @@ public class ComponentMover extends MouseAdapter {
 	/*
 	 * Get the bounds of the parent of the dragged component.
 	 */
-	private Dimension getBoundingSize(Component source) {
-		if (source instanceof Window) {
-			GraphicsEnvironment env = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			Rectangle bounds = env.getMaximumWindowBounds();
-			return new Dimension(bounds.width, bounds.height);
-		} else {
-			return source.getParent().getSize();
-		}
+	private Dimension getBoundingSize(ElementPanel<?> source) {
+		return source.getParent().getSize();
 	}
 
 	/**
-	 * Restore the original state of the Component
+	 * Restore the original state of the ElementPanel
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -305,15 +306,15 @@ public class ComponentMover extends MouseAdapter {
 		if (changeCursor)
 			source.setCursor(originalCursor);
 
-		if (destination instanceof JComponent) {
-			((JComponent) destination).setAutoscrolls(autoscrolls);
+		if (destination instanceof ElementPanel<?>) {
+			((ElementPanel<?>) destination).setAutoscrolls(autoscrolls);
 		}
 
 		// Layout the components on the parent container
 
 		if (autoLayout) {
-			if (destination instanceof JComponent) {
-				((JComponent) destination).revalidate();
+			if (destination instanceof ElementPanel<?>) {
+				((ElementPanel<?>) destination).revalidate();
 			} else {
 				destination.validate();
 			}

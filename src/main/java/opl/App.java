@@ -25,7 +25,7 @@ public class App {
 		
 		// Create spoon instance
 		Launcher spoon = new Launcher();
-		
+
 		// Change the spoon output directory: use the analyzed project
 		String[] setOutput = {"-o", projectPath};
 		spoon.setArgs(setOutput);

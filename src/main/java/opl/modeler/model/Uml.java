@@ -8,6 +8,7 @@ import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
+import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.EnumFactory;
 import spoon.reflect.factory.InterfaceFactory;
 
@@ -79,6 +80,7 @@ public class Uml extends Observable {
 	 */
 	public void addClass(String qualifiedName) throws Exception {
 		CtClass<?> createdClass = spoon.getFactory().Class().create(qualifiedName);
+		createdClass.setVisibility(ModifierKind.PUBLIC);
 		classes.add(createdClass);
 		spoon.run();
 		notifyClassAdded(createdClass);
@@ -94,6 +96,7 @@ public class Uml extends Observable {
 	 */
 	public void addInterface(String qualifiedName) throws Exception {
 		CtInterface<?> createdInterface = new InterfaceFactory(spoon.getFactory()).create(qualifiedName);
+		createdInterface.setVisibility(ModifierKind.PUBLIC);
 		interfaces.add(createdInterface);
 		spoon.run();
 		notifyInterfaceAdded(createdInterface);
@@ -108,6 +111,7 @@ public class Uml extends Observable {
 	 */
 	public void addEnumeration(String qualifiedName) throws Exception {
 		CtEnum<?> createdEnumeration = new EnumFactory(spoon.getFactory()).create(qualifiedName);
+		createdEnumeration.setVisibility(ModifierKind.PUBLIC);
 		enumerations.add(createdEnumeration);
 		notifyEnumAdded(createdEnumeration);
 	}

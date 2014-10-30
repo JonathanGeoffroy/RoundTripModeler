@@ -1,6 +1,7 @@
 package opl.modeler.views;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -124,5 +125,9 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	public T getCtElement() {
+		return ctElement;
 	}
 }

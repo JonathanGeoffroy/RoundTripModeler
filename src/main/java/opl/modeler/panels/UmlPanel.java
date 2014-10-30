@@ -1,12 +1,10 @@
 package opl.modeler.panels;
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import opl.modeler.UmlModeler;
 import opl.modeler.model.Uml;
 import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
@@ -33,11 +31,14 @@ public class UmlPanel extends JPanel implements Observer {
 	private static final long serialVersionUID = 1386070124268041527L;
 	private ComponentMover cm;
 	private Uml uml;
+	private UmlModeler modeler;
 	private ElementPanel<?> selected;
 	
-	public UmlPanel(Uml uml) {
+	public UmlPanel(Uml uml, UmlModeler modeler) {
 		super();
 		this.uml = uml;
+		this.modeler = modeler;
+		
 		this.setLayout(null);
 		setPreferredSize(new Dimension(800, 600));
 
@@ -48,29 +49,26 @@ public class UmlPanel extends JPanel implements Observer {
 	}
 
 	private void addPanel(ElementPanel<?> elementPanel) {
-		elementPanel.setPreferredSize(new Dimension(100, 100));
+		elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 		this.add(elementPanel);
 		cm.registerComponent(elementPanel);
 	}
 
 	private void addAllPanels() {
-		cm = new ComponentMover(this);
+		cm = new ComponentMover(modeler);
 		ElementPanel<?> elementPanel;
 		for (CtClass<?> c : uml.getClasses()) {
 			elementPanel = new ClassPanel(c);
-			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 
 		for (CtInterface<?> i : uml.getInterfaces()) {
 			elementPanel = new InterfacePanel(i);
-			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 
 		for (CtEnum<?> e : uml.getEnumerations()) {
 			elementPanel = new EnumPanel(e);
-			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);
 			addPanel(elementPanel);
 		}
 	}
@@ -103,13 +101,18 @@ public class UmlPanel extends JPanel implements Observer {
 		repaint();
 	}
 
-	public void notifySelectionChanged(Component source) {
-		if(selected != null) {
-			selected.setSelected(false);
+	public void notifySelectionChanged(ElementPanel<?> newSelection) {
+		if(this.selected != null) {
+			this.selected.setSelected(false);
 		}
-		selected = (ElementPanel<?>)source;
-		selected.setSelected(true);
+		this.selected = newSelection;
+		newSelection.setSelected(true);
+		
 		revalidate();
 		repaint();
+	}
+
+	public ElementPanel<?> getSelected() {
+		return selected;
 	}
 }

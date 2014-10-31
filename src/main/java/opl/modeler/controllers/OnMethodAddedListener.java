@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import opl.modeler.UmlModeler;
-import opl.modeler.dialogboxes.AddFieldDialog;
 import opl.modeler.dialogboxes.AddMethodDialog;
 
 public class OnMethodAddedListener implements ActionListener {

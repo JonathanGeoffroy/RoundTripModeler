@@ -11,16 +11,10 @@ import opl.modeler.panels.ButtonsPanel;
 import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
 import opl.modeler.views.ElementPanel;
-import opl.processors.ClassesProcessor;
-import opl.processors.EnumsProcessor;
-import opl.processors.FieldCreator;
-import opl.processors.InterfacesProcessor;
+import opl.processors.AddField;
 import opl.processors.MethodCreator;
-import opl.processors.UmlFinder;
 import spoon.Launcher;
-import spoon.processing.ProcessingManager;
 import spoon.reflect.declaration.CtType;
-import spoon.support.QueueProcessingManager;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -69,9 +63,12 @@ public class UmlModeler extends JFrame {
 	public void addField(String name, String type) throws Exception {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedType = selectedPanel.getCtElement();
-		FieldCreator.addField(spoon, name, type, selectedType);
+		AddField addField = new AddField(type, name, selectedType.getQualifiedName());
+		addField.setFactory(selectedType.getFactory());
+		addField.process();
+		// FieldCreator.addField(spoon, name, type, selectedType);
 
-		spoon.run();
+		// spoon.run();
 
 		notifySelectionChanged(selectedPanel);
 	}

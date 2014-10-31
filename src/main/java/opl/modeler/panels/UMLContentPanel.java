@@ -15,16 +15,17 @@ import opl.modeler.controllers.OnClassNameChangedListener;
 import opl.modeler.controllers.OnFieldAddedListener;
 import opl.modeler.controllers.OnFieldRemovedListener;
 import opl.modeler.controllers.OnMethodAddedListener;
+import opl.modeler.controllers.OnMethodRemovedListener;
 import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
 import opl.modeler.views.InterfacePanel;
 import opl.processors.FieldReferencesProcessor;
+import opl.processors.MethodReferencesProcessor;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
-import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtReference;
-import spoon.reflect.reference.CtTypeReference;
 
 /**
  * A JPanel able to show name, attributes and methods of the selected class of
@@ -140,7 +141,7 @@ public class UMLContentPanel extends JPanel {
 		JButton removeButton;
 		List<CtReference> processorReferences;
 		FieldReferencesProcessor processor;
-		
+
 		for(CtField<?> field : selected.getFields()) {
 			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
 			removeButton = new JButton("X");
@@ -174,11 +175,29 @@ public class UMLContentPanel extends JPanel {
 	 * @return the JPanel
 	 */
 	private JPanel createMethodsPanel(CtType<?> selected) {
-		JPanel methods = new JPanel();
-		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
-		methods.setLayout(methodsLayout);
+		JButton removeButton;
+		List<CtReference> processorReferences;
+		MethodReferencesProcessor processor;
+		
+		JPanel methods = new JPanel(new GridLayout(0, 2));
 		for(CtMethod<?> method : selected.getMethods()) {
 			methods.add(new Label(method.getSignature()));
+			removeButton = new JButton("X");
+			removeButton.addActionListener(new OnMethodRemovedListener(modeler, method));
+			removeButton.setPreferredSize(new Dimension(20, 20));
+			methods.add(removeButton);
+			
+			// Check if the field is used
+			// If it is, user can't remove this field
+			processor = new MethodReferencesProcessor(method);
+			for(CtClass<?> c: modeler.getUml().getClasses()) {
+				processor.process(c);
+			}
+			processorReferences = processor.getReferences();
+			if(!processorReferences.isEmpty()) {
+				removeButton.setEnabled(false);
+				removeButton.setToolTipText("This method is used by: " + processorReferences);
+			}
 		}
 		JButton addMethodButton = new JButton("Add Method");
 		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));

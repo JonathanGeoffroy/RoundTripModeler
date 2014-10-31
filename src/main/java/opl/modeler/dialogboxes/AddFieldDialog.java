@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
-import opl.processors.UmlFinder;
 
 public class AddFieldDialog {
 

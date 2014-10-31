@@ -41,33 +41,20 @@ public class UMLContentPanel extends JPanel {
 		selected.accept(this);
 	}
 
+	/**
+	 * Specific drawing method for ClassPanel <br>
+	 * Show name, attributes and methods
+	 * 
+	 * @param selected
+	 *            the panel to display
+	 */
 	public void drawElementPanel(ClassPanel selected) {
 		this.removeAll();
 		CtType<?> selectedCtType = selected.getCtElement();
 
-		JTextField name = new JTextField();
-		name.setPreferredSize(new Dimension(200, 20));
-		name.setText(selectedCtType.getSimpleName());
-
-		JPanel attributes = new JPanel();
-		BoxLayout attrsLayout = new BoxLayout(attributes, BoxLayout.Y_AXIS);
-		attributes.setLayout(attrsLayout);
-		for(CtField<?> field : selectedCtType.getFields()) {
-			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
-		}
-		JButton addFieldButton = new JButton("Add Field");
-		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
-		attributes.add(addFieldButton);
-
-		JPanel methods = new JPanel();
-		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
-		methods.setLayout(methodsLayout);
-		for(CtMethod<?> method : selectedCtType.getMethods()) {
-			methods.add(new Label(method.getSignature()));
-		}
-		JButton addMethodButton = new JButton("Add Method");
-		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
-		methods.add(addMethodButton);
+		JTextField name = createNamePanel(selectedCtType);
+		JPanel attributes = createAttributesPanel(selectedCtType);
+		JPanel methods = createMethodsPanel(selectedCtType);
 
 		JPanel components = new JPanel();
 		BoxLayout componentsLayout = new BoxLayout(components, BoxLayout.Y_AXIS);
@@ -82,23 +69,19 @@ public class UMLContentPanel extends JPanel {
 		repaint();
 	}
 
+	/**
+	 * Specific drawing method for InterfacePanel <br>
+	 * Show name and attributes
+	 * 
+	 * @param selected
+	 *            the panel to display
+	 */
 	public void drawElementPanel(InterfacePanel selected) {
 		this.removeAll();
 		CtType<?> selectedCtType = selected.getCtElement();
 
-		JTextField name = new JTextField();
-		name.setPreferredSize(new Dimension(200, 20));
-		name.setText(selectedCtType.getSimpleName());
-
-		JPanel methods = new JPanel();
-		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
-		methods.setLayout(methodsLayout);
-		for(CtMethod<?> method : selectedCtType.getMethods()) {
-			methods.add(new Label(method.getSignature()));
-		}
-		JButton addMethodButton = new JButton("Add Method");
-		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
-		methods.add(addMethodButton);
+		JTextField name = createNamePanel(selectedCtType);
+		JPanel methods = createMethodsPanel(selectedCtType);
 
 		JPanel components = new JPanel();
 		BoxLayout componentsLayout = new BoxLayout(components, BoxLayout.Y_AXIS);
@@ -110,5 +93,61 @@ public class UMLContentPanel extends JPanel {
 
 		revalidate();
 		repaint();
+	}
+	
+	/**
+	 * Create a TextField which contains the name of the selected panel
+	 * 
+	 * @param selected
+	 *            the selected panel
+	 * @return the textfield
+	 */
+	private JTextField createNamePanel(CtType<?> selected) {
+		JTextField name = new JTextField();
+		name.setPreferredSize(new Dimension(200, 20));
+		name.setText(selected.getSimpleName());
+		return name;
+	}
+	
+	/**
+	 * Create a JPanel which contains all attributes of the selected panel
+	 * 
+	 * @param selected
+	 *            the selected panel
+	 * @return the JPanel
+	 */
+	private JPanel createAttributesPanel(CtType<?> selected) {
+		JPanel attributes = new JPanel();
+		BoxLayout attrsLayout = new BoxLayout(attributes, BoxLayout.Y_AXIS);
+		attributes.setLayout(attrsLayout);
+		for(CtField<?> field : selected.getFields()) {
+			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+		}
+		JButton addFieldButton = new JButton("Add Field");
+		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
+		attributes.add(addFieldButton);
+		
+		return attributes;
+	}
+	
+	/**
+	 * Create a JPanel which contains all methods of the selected panel
+	 * 
+	 * @param selected
+	 *            the selected panel
+	 * @return the JPanel
+	 */
+	private JPanel createMethodsPanel(CtType<?> selected) {
+		JPanel methods = new JPanel();
+		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
+		methods.setLayout(methodsLayout);
+		for(CtMethod<?> method : selected.getMethods()) {
+			methods.add(new Label(method.getSignature()));
+		}
+		JButton addMethodButton = new JButton("Add Method");
+		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
+		methods.add(addMethodButton);
+		
+		return methods;
 	}
 }

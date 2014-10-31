@@ -23,17 +23,18 @@ public class AddFieldDialog {
 		panel.add(typeLabel);
 		panel.add(typeField);
 
-		JOptionPane optionPane = new JOptionPane();
-		optionPane.add(panel);
-		optionPane.createDialog("Add new Field").setVisible(true);
+		int result = JOptionPane.showConfirmDialog(null, panel, 
+				"Add new Field", JOptionPane.OK_CANCEL_OPTION);
 
-		String nameString = nameField.getText();
-		String typeString = typeField.getText();
-		if(nameString != null && typeString != null) {
-			try {
-				modeler.addField(nameString, typeString);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
+		if (result == JOptionPane.OK_OPTION) {
+			String nameString = nameField.getText();
+			String typeString = typeField.getText();
+			if(nameString != null && typeString != null) {
+				try {
+					modeler.addField(nameString, typeString);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}

@@ -23,17 +23,18 @@ public class AddMethodDialog {
 		panel.add(typeLabel);
 		panel.add(returnTypeMethod);
 
-		JOptionPane optionPane = new JOptionPane();
-		optionPane.add(panel);
-		optionPane.createDialog("Add new Method").setVisible(true);
+		int result = JOptionPane.showConfirmDialog(null, panel, 
+				"Add new Method", JOptionPane.OK_CANCEL_OPTION);
 
-		String nameString = nameMethod.getText();
-		String typeString = returnTypeMethod.getText();
-		if(nameString != null && typeString != null) {
-			try {
-				modeler.addMethod(nameString, typeString);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
+		if (result == JOptionPane.OK_OPTION) {
+			String nameString = nameMethod.getText();
+			String typeString = returnTypeMethod.getText();
+			if(nameString != null && typeString != null) {
+				try {
+					modeler.addMethod(nameString, typeString);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}

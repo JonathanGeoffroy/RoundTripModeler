@@ -1,10 +1,12 @@
 package opl.modeler.panels;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,9 +24,7 @@ import opl.processors.FieldReferencesProcessor;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
-import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtReference;
-import spoon.reflect.reference.CtTypeReference;
 
 /**
  * A JPanel able to show name, attributes and methods of the selected class of
@@ -34,15 +34,14 @@ import spoon.reflect.reference.CtTypeReference;
  *
  */
 public class UMLContentPanel extends JPanel {
-	/**
-	 *
-	 */
+
 	private static final long serialVersionUID = -967498044236816796L;
 	private UmlModeler modeler;
 
 	public UMLContentPanel(UmlModeler modeler) {
 		this.modeler = modeler;
 		setPreferredSize(new Dimension(400, 600));
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
 	public void notifySelectionChanged(ElementPanel<?> selected) {
@@ -52,7 +51,7 @@ public class UMLContentPanel extends JPanel {
 	/**
 	 * Specific drawing method for ClassPanel <br>
 	 * Show name, attributes and methods
-	 * 
+	 *
 	 * @param selected
 	 *            the panel to display
 	 */
@@ -80,7 +79,7 @@ public class UMLContentPanel extends JPanel {
 	/**
 	 * Specific drawing method for InterfacePanel <br>
 	 * Show name and attributes
-	 * 
+	 *
 	 * @param selected
 	 *            the panel to display
 	 */
@@ -102,10 +101,10 @@ public class UMLContentPanel extends JPanel {
 		revalidate();
 		repaint();
 	}
-	
+
 	/**
 	 * Create a JPanel which contains the name of the selected panel
-	 * 
+	 *
 	 * @param selected
 	 *            the selected panel
 	 * @return the JPanel
@@ -127,10 +126,10 @@ public class UMLContentPanel extends JPanel {
 		namePanel.add(nameButton);
 		return namePanel;
 	}
-	
+
 	/**
 	 * Create a JPanel which contains all attributes of the selected panel
-	 * 
+	 *
 	 * @param selected
 	 *            the selected panel
 	 * @return the JPanel
@@ -140,14 +139,14 @@ public class UMLContentPanel extends JPanel {
 		JButton removeButton;
 		List<CtReference> processorReferences;
 		FieldReferencesProcessor processor;
-		
+
 		for(CtField<?> field : selected.getFields()) {
 			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
 			removeButton = new JButton("X");
 			removeButton.addActionListener(new OnFieldRemovedListener(modeler, field));
 			removeButton.setPreferredSize(new Dimension(20, 20));
 			attributes.add(removeButton);
-			
+
 			// Check if the field is used
 			// If it is, user can't remove this field
 			processor = new FieldReferencesProcessor();
@@ -157,18 +156,18 @@ public class UMLContentPanel extends JPanel {
 				removeButton.setEnabled(false);
 				removeButton.setToolTipText("This field is used by: " + processorReferences);
 			}
-			
+
 		}
 		JButton addFieldButton = new JButton("Add Field");
 		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
 		attributes.add(addFieldButton);
-		
+
 		return attributes;
 	}
-	
+
 	/**
 	 * Create a JPanel which contains all methods of the selected panel
-	 * 
+	 *
 	 * @param selected
 	 *            the selected panel
 	 * @return the JPanel
@@ -183,7 +182,7 @@ public class UMLContentPanel extends JPanel {
 		JButton addMethodButton = new JButton("Add Method");
 		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
 		methods.add(addMethodButton);
-		
+
 		return methods;
 	}
 }

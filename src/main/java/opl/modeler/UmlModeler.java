@@ -77,4 +77,8 @@ public class UmlModeler extends JFrame {
 	public Launcher getSpoon() {
 		return spoon;
 	}
+
+	public ElementPanel<?> getSelectedElement() {
+		return umlPanel.getSelected();
+	}
 }

@@ -1,7 +1,9 @@
 package opl.modeler.panels;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Label;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,13 +13,18 @@ import javax.swing.JTextField;
 import opl.modeler.UmlModeler;
 import opl.modeler.controllers.OnClassNameChangedListener;
 import opl.modeler.controllers.OnFieldAddedListener;
+import opl.modeler.controllers.OnFieldRemovedListener;
 import opl.modeler.controllers.OnMethodAddedListener;
 import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
 import opl.modeler.views.InterfacePanel;
+import opl.processors.FieldReferencesProcessor;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
+import spoon.reflect.reference.CtFieldReference;
+import spoon.reflect.reference.CtReference;
+import spoon.reflect.reference.CtTypeReference;
 
 /**
  * A JPanel able to show name, attributes and methods of the selected class of
@@ -35,7 +42,7 @@ public class UMLContentPanel extends JPanel {
 
 	public UMLContentPanel(UmlModeler modeler) {
 		this.modeler = modeler;
-		setPreferredSize(new Dimension(200, 600));
+		setPreferredSize(new Dimension(400, 600));
 	}
 
 	public void notifySelectionChanged(ElementPanel<?> selected) {
@@ -129,11 +136,28 @@ public class UMLContentPanel extends JPanel {
 	 * @return the JPanel
 	 */
 	private JPanel createAttributesPanel(CtType<?> selected) {
-		JPanel attributes = new JPanel();
-		BoxLayout attrsLayout = new BoxLayout(attributes, BoxLayout.Y_AXIS);
-		attributes.setLayout(attrsLayout);
+		JPanel attributes = new JPanel(new GridLayout(0, 2));
+		JButton removeButton;
+		List<CtReference> processorReferences;
+		FieldReferencesProcessor processor;
+		
 		for(CtField<?> field : selected.getFields()) {
 			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+			removeButton = new JButton("X");
+			removeButton.addActionListener(new OnFieldRemovedListener(modeler, field));
+			removeButton.setPreferredSize(new Dimension(20, 20));
+			attributes.add(removeButton);
+			
+			// Check if the field is used
+			// If it is, user can't remove this field
+			processor = new FieldReferencesProcessor();
+			processor.process(field);
+			processorReferences = processor.getReferences();
+			if(!processorReferences.isEmpty()) {
+				removeButton.setEnabled(false);
+				removeButton.setToolTipText("This field is used by: " + processorReferences);
+			}
+			
 		}
 		JButton addFieldButton = new JButton("Add Field");
 		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));

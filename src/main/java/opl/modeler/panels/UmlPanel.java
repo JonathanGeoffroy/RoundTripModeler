@@ -24,7 +24,6 @@ import spoon.reflect.declaration.CtInterface;
  *
  */
 public class UmlPanel extends JPanel implements Observer {
-
 	/**
 	 * 
 	 */

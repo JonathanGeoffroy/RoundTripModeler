@@ -32,13 +32,14 @@ public class OnClassNameChangedListener implements ActionListener {
 		File classFile = element.getCtElement().getPosition().getFile();
 		
 		// Rename the element
+		String oldName = element.getCtElement().getQualifiedName();
 		String newName = name.getText();
 		element.getCtElement().setSimpleName(newName);
 		
 		// Remove the element from the File System
 		classFile.delete();
 		
-		modeler.notifySelectionChanged(element);
+		modeler.notifySelectionRenamed(oldName, element.getCtElement().getQualifiedName());
 	}
 
 }

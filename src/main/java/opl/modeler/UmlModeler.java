@@ -18,8 +18,6 @@ import spoon.Launcher;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
-import spoon.reflect.declaration.ModifierKind;
-import spoon.support.reflect.declaration.CtFieldImpl;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -60,9 +58,18 @@ public class UmlModeler extends JFrame {
 		pack();
 	}
 
+	public void notifySelectionRenamed(String oldName, String newName) {
+		umlPanel.notifySelectionRenamed(oldName, newName);
+		umlContentPanel.notifySelectionChanged(getSelectedElement());
+	}
+	
 	public void notifySelectionChanged(ElementPanel<?> selected) {
 		umlPanel.notifySelectionChanged(selected);
 		umlContentPanel.notifySelectionChanged(selected);
+	}
+
+	public void notifyElementRemoved(ElementPanel<?> removed) {
+		umlPanel.onElementRemoved(removed);
 	}
 
 	public void addField(String name, String type) throws Exception {

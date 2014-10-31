@@ -1,5 +1,6 @@
 package opl.observer;
 
+import opl.modeler.views.ElementPanel;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
@@ -45,4 +46,12 @@ public interface Observer {
 	 * Called by Observable when a the source code is reloaded
 	 */
 	public void onCodeReloaded();
+
+	/**
+	 * Callback when an element is removed from AST
+	 * 
+	 * @param removed
+	 *            the removed graphical element
+	 */
+	public void onElementRemoved(ElementPanel<?> removed);
 }

@@ -129,6 +129,10 @@ public abstract class ElementPanel<T extends CtType<?>> extends JPanel {
 		return ctElement;
 	}
 
+	public void setCtElement(CtType<?> ctElement) {
+		this.ctElement = (T) ctElement;
+	}
+	
 	/**
 	 * Draw the ElementPanel in the UMLContentPanel.
 	 * @param umlContentPanel panel which shows the elements of this

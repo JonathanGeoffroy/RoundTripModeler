@@ -7,6 +7,7 @@ import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.declaration.CtMethodImpl;
+import spoon.support.reflect.reference.CtTypeReferenceImpl;
 
 public class MethodCreator {
 
@@ -15,16 +16,21 @@ public class MethodCreator {
 		CtTypeReference typeReference;
 		Factory factory = spoon.getFactory();
 
-		// Try to find the class into project
-		CtType<?> ctType = factory.Class().get(returnType);
+		if(returnType.equals("void")) {
+			typeReference = new CtTypeReferenceImpl();
+			typeReference.setSimpleName(CtTypeReference.NULL_TYPE_NAME);
+		} else {
+			// Try to find the class into project
+			CtType<?> ctType = factory.Class().get(returnType);
 
-		if(ctType != null) {
-			typeReference = ctType.getReference();
-		}
-		else { // if the searched class isn't into the project, try to find it into classloader
-			ClassLoader loader = factory.getClass().getClassLoader();
-			Class<?> c = loader.loadClass(returnType);
-			typeReference = factory.Class().createReference(c);
+			if(ctType != null) {
+				typeReference = ctType.getReference();
+			}
+			else { // if the searched class isn't into the project, try to find it into classloader
+				ClassLoader loader = factory.getClass().getClassLoader();
+				Class<?> c = loader.loadClass(returnType);
+				typeReference = factory.Class().createReference(c);
+			}
 		}
 
 		CtMethod<?> method = new CtMethodImpl<Object>();

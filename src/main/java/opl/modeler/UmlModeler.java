@@ -73,4 +73,8 @@ public class UmlModeler extends JFrame {
 		spoon.run();
 		notifySelectionChanged(selectedPanel);
 	}
+
+	public Launcher getSpoon() {
+		return spoon;
+	}
 }

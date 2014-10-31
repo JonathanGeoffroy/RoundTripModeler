@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
+import opl.modeler.controllers.OnClassNameChangedListener;
 import opl.modeler.controllers.OnFieldAddedListener;
 import opl.modeler.controllers.OnMethodAddedListener;
 import opl.modeler.views.ClassPanel;
@@ -52,7 +53,7 @@ public class UMLContentPanel extends JPanel {
 		this.removeAll();
 		CtType<?> selectedCtType = selected.getCtElement();
 
-		JTextField name = createNamePanel(selectedCtType);
+		JPanel name = createNamePanel(selected);
 		JPanel attributes = createAttributesPanel(selectedCtType);
 		JPanel methods = createMethodsPanel(selectedCtType);
 
@@ -80,7 +81,7 @@ public class UMLContentPanel extends JPanel {
 		this.removeAll();
 		CtType<?> selectedCtType = selected.getCtElement();
 
-		JTextField name = createNamePanel(selectedCtType);
+		JPanel name = createNamePanel(selected);
 		JPanel methods = createMethodsPanel(selectedCtType);
 
 		JPanel components = new JPanel();
@@ -96,17 +97,28 @@ public class UMLContentPanel extends JPanel {
 	}
 	
 	/**
-	 * Create a TextField which contains the name of the selected panel
+	 * Create a JPanel which contains the name of the selected panel
 	 * 
 	 * @param selected
 	 *            the selected panel
-	 * @return the textfield
+	 * @return the JPanel
 	 */
-	private JTextField createNamePanel(CtType<?> selected) {
-		JTextField name = new JTextField();
-		name.setPreferredSize(new Dimension(200, 20));
-		name.setText(selected.getSimpleName());
-		return name;
+	private JPanel createNamePanel(ElementPanel<?> selected) {
+		JPanel namePanel = new JPanel();
+		BoxLayout layout = new BoxLayout(namePanel, BoxLayout.X_AXIS);
+		namePanel.setLayout(layout);
+
+		JTextField nameField = new JTextField();
+		nameField.setPreferredSize(new Dimension(130, 20));
+		nameField.setText(selected.getCtElement().getSimpleName());
+
+		JButton nameButton = new JButton("Ok");
+		nameButton.setPreferredSize(new Dimension(70, 20));
+		nameButton.addActionListener(new OnClassNameChangedListener(modeler, selected, nameField));
+
+		namePanel.add(nameField);
+		namePanel.add(nameButton);
+		return namePanel;
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package opl.modeler;
 
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,10 +12,14 @@ import opl.modeler.panels.ButtonsPanel;
 import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
 import opl.modeler.views.ElementPanel;
-import opl.processors.AddField;
+import opl.processors.FieldCreator;
 import opl.processors.MethodCreator;
 import spoon.Launcher;
+import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
+import spoon.reflect.declaration.ModifierKind;
+import spoon.support.reflect.declaration.CtFieldImpl;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -62,14 +67,10 @@ public class UmlModeler extends JFrame {
 
 	public void addField(String name, String type) throws Exception {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
-		CtType<?> selectedType = selectedPanel.getCtElement();
-		AddField addField = new AddField(type, name, selectedType.getQualifiedName());
-		addField.setFactory(selectedType.getFactory());
-		addField.process();
-		// FieldCreator.addField(spoon, name, type, selectedType);
-
-		// spoon.run();
-
+		CtType<?> selectedCtType = selectedPanel.getCtElement();
+		FieldCreator.addField(spoon, name, type, selectedCtType);
+		
+		spoon.run();
 		notifySelectionChanged(selectedPanel);
 	}
 
@@ -81,6 +82,44 @@ public class UmlModeler extends JFrame {
 		notifySelectionChanged(selectedPanel);
 	}
 
+	/**
+	 * Remove a field from the AST, and notify the view part
+	 * 
+	 * @param field
+	 *            the field to remove
+	 * @throws Exception
+	 *             spoon.run() exceptions
+	 */
+	public void removeField(CtField<?> field) throws Exception {
+		ElementPanel<?> selectedElement = getSelectedElement();
+		selectedElement.getCtElement().removeField(field);
+		
+		File classFile = field.getParent().getPosition().getFile();
+		classFile.delete();
+		
+		spoon.run();
+		notifySelectionChanged(selectedElement);
+	}
+	
+	/**
+	 * Remove a method from the AST, and notify the view part
+	 * 
+	 * @param method
+	 *            the method to remove
+	 * @throws Exception
+	 *             spoon.run() exceptions
+	 */
+	public void removeMethod(CtMethod<?> method) throws Exception {
+		ElementPanel<?> selectedElement = getSelectedElement();
+		selectedElement.getCtElement().removeMethod(method);
+		
+		File classFile = method.getParent().getPosition().getFile();
+		classFile.delete();	
+		
+		spoon.run();
+		notifySelectionChanged(selectedElement);
+	}
+	
 	public Launcher getSpoon() {
 		return spoon;
 	}

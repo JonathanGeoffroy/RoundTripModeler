@@ -29,8 +29,8 @@ public class FieldCreator {
 		CtField<?> field = new CtFieldImpl<Object>();
 		field.setSimpleName(name);
 		field.setType(typeReference);
-		field.setParent(parent);
 		field.setVisibility(ModifierKind.PRIVATE);
-		factory.Field().create(parent, field);
+		field.setParent(parent);
+		parent.addField(field);
 	}
 }

@@ -11,10 +11,16 @@ import opl.modeler.panels.ButtonsPanel;
 import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
 import opl.modeler.views.ElementPanel;
+import opl.processors.ClassesProcessor;
+import opl.processors.EnumsProcessor;
 import opl.processors.FieldCreator;
+import opl.processors.InterfacesProcessor;
 import opl.processors.MethodCreator;
+import opl.processors.UmlFinder;
 import spoon.Launcher;
+import spoon.processing.ProcessingManager;
 import spoon.reflect.declaration.CtType;
+import spoon.support.QueueProcessingManager;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -31,11 +37,13 @@ public class UmlModeler extends JFrame {
 	private UMLContentPanel umlContentPanel;
 	private UmlPanel umlPanel;
 	private Launcher spoon;
+	private Uml uml;
 
 	public UmlModeler(String title, Launcher spoon, Uml uml) throws HeadlessException {
 		super(title);
 		this.spoon = spoon;
-
+		this.uml = uml;
+		
 		ButtonsPanel buttonsPanel = new ButtonsPanel(spoon, uml);
 		umlContentPanel = new UMLContentPanel(this);
 		umlPanel = new UmlPanel(uml, this);
@@ -62,7 +70,9 @@ public class UmlModeler extends JFrame {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedType = selectedPanel.getCtElement();
 		FieldCreator.addField(spoon, name, type, selectedType);
+
 		spoon.run();
+
 		notifySelectionChanged(selectedPanel);
 	}
 
@@ -78,6 +88,10 @@ public class UmlModeler extends JFrame {
 		return spoon;
 	}
 
+	public Uml getUml() {
+		return uml;
+	}
+	
 	public ElementPanel<?> getSelectedElement() {
 		return umlPanel.getSelected();
 	}

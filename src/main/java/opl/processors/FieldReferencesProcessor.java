@@ -57,18 +57,18 @@ public class FieldReferencesProcessor extends AbstractProcessor<CtField<?>> {
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
-class FieldReferenceFilter implements ReferenceFilter<CtFieldReference<?>> {
+class FieldReferenceFilter implements ReferenceFilter<CtFieldReference> {
 	private CtField<?> field;
 	FieldReferenceFilter(CtField<?> field) {
 		this.field = field;
 	}
 	
-	public boolean matches(CtFieldReference<?> reference) {
+	public boolean matches(CtFieldReference reference) {
 		return field.getReference().equals(reference);
 	}
 
-	public Class<CtFieldReference<?>> getType() {
-		return (Class<CtFieldReference<?>>) field.getReference().getClass();
+	public Class<CtFieldReference> getType() {
+		return CtFieldReference.class;
 	}
 
 }

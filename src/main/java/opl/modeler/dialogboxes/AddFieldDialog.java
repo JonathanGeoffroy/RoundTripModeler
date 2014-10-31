@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
+import opl.processors.UmlFinder;
 
 public class AddFieldDialog {
 
@@ -33,6 +34,7 @@ public class AddFieldDialog {
 				try {
 					modeler.addField(nameString, typeString);
 				} catch (Exception e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
 				}
 			}

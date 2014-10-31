@@ -10,7 +10,10 @@ import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
 import opl.modeler.controllers.OnFieldAddedListener;
+import opl.modeler.controllers.OnMethodAddedListener;
+import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
+import opl.modeler.views.InterfacePanel;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
@@ -18,13 +21,13 @@ import spoon.reflect.declaration.CtType;
 /**
  * A JPanel able to show name, attributes and methods of the selected class of
  * the UmlPanel
- * 
+ *
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
 public class UMLContentPanel extends JPanel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -967498044236816796L;
 	private UmlModeler modeler;
@@ -35,17 +38,17 @@ public class UMLContentPanel extends JPanel {
 	}
 
 	public void notifySelectionChanged(ElementPanel<?> selected) {
-		drawElementPanel(selected);
+		selected.accept(this);
 	}
 
-	private void drawElementPanel(ElementPanel<?> selected) {
+	public void drawElementPanel(ClassPanel selected) {
 		this.removeAll();
 		CtType<?> selectedCtType = selected.getCtElement();
-		
+
 		JTextField name = new JTextField();
 		name.setPreferredSize(new Dimension(200, 20));
 		name.setText(selectedCtType.getSimpleName());
-		
+
 		JPanel attributes = new JPanel();
 		BoxLayout attrsLayout = new BoxLayout(attributes, BoxLayout.Y_AXIS);
 		attributes.setLayout(attrsLayout);
@@ -55,13 +58,16 @@ public class UMLContentPanel extends JPanel {
 		JButton addFieldButton = new JButton("Add Field");
 		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
 		attributes.add(addFieldButton);
-		
+
 		JPanel methods = new JPanel();
 		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
 		methods.setLayout(methodsLayout);
 		for(CtMethod<?> method : selectedCtType.getMethods()) {
-			attributes.add(new Label(method.getSignature()));
+			methods.add(new Label(method.getSignature()));
 		}
+		JButton addMethodButton = new JButton("Add Method");
+		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
+		methods.add(addMethodButton);
 
 		JPanel components = new JPanel();
 		BoxLayout componentsLayout = new BoxLayout(components, BoxLayout.Y_AXIS);
@@ -71,7 +77,37 @@ public class UMLContentPanel extends JPanel {
 
 		this.add(name);
 		this.add(components);
-		
+
+		revalidate();
+		repaint();
+	}
+
+	public void drawElementPanel(InterfacePanel selected) {
+		this.removeAll();
+		CtType<?> selectedCtType = selected.getCtElement();
+
+		JTextField name = new JTextField();
+		name.setPreferredSize(new Dimension(200, 20));
+		name.setText(selectedCtType.getSimpleName());
+
+		JPanel methods = new JPanel();
+		BoxLayout methodsLayout = new BoxLayout(methods, BoxLayout.Y_AXIS);
+		methods.setLayout(methodsLayout);
+		for(CtMethod<?> method : selectedCtType.getMethods()) {
+			methods.add(new Label(method.getSignature()));
+		}
+		JButton addMethodButton = new JButton("Add Method");
+		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
+		methods.add(addMethodButton);
+
+		JPanel components = new JPanel();
+		BoxLayout componentsLayout = new BoxLayout(components, BoxLayout.Y_AXIS);
+		components.setLayout(componentsLayout);
+		components.add(methods);
+
+		this.add(name);
+		this.add(components);
+
 		revalidate();
 		repaint();
 	}

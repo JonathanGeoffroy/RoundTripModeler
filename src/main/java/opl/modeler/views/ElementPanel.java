@@ -1,29 +1,27 @@
 package opl.modeler.views;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import opl.modeler.panels.UMLContentPanel;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 
 /**
  * Draw an uml component
- * 
+ *
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  * @param <T>
  */
-public class ElementPanel<T extends CtType<?>> extends JPanel {
-	/**
-	 * 
-	 */
+public abstract class ElementPanel<T extends CtType<?>> extends JPanel {
+
 	private static final long serialVersionUID = 3864276811483965605L;
 	protected static final int HEIGHT_BEFORE_ELEMENT_NAME = 40;
-	
+
 	/**
 	 * The element to draw
 	 */
@@ -33,7 +31,7 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 	 * True if the element is selected by user in uml diagram
 	 */
 	protected boolean selected;
-	
+
 	/**
 	 * The current width of the component
 	 */
@@ -51,7 +49,7 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 
 	/**
 	 * Draw a rectangle around the component
-	 * 
+	 *
 	 * @param g
 	 *            GUI Graphics
 	 */
@@ -67,7 +65,7 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 
 	/**
 	 * Draw the name of the component, followed by a line
-	 * 
+	 *
 	 * @param g
 	 *            GUI Graphics
 	 */
@@ -82,7 +80,7 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 
 	/**
 	 * Draw each field of the component, followed by a line
-	 * 
+	 *
 	 * @param g
 	 *            GUI Graphics
 	 */
@@ -104,7 +102,7 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 
 	/**
 	 * Draw each method of the component
-	 * 
+	 *
 	 * @param g
 	 *            GUI Graphics
 	 */
@@ -126,8 +124,14 @@ public class ElementPanel<T extends CtType<?>> extends JPanel {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
+
 	public T getCtElement() {
 		return ctElement;
 	}
+
+	/**
+	 * Draw the ElementPanel in the UMLContentPanel.
+	 * @param umlContentPanel panel which shows the elements of this
+	 */
+	public abstract void accept(UMLContentPanel umlContentPanel);
 }

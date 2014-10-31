@@ -3,18 +3,19 @@ package opl.modeler.views;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import opl.modeler.panels.UMLContentPanel;
 import spoon.reflect.declaration.CtInterface;
 
 /**
  * Draw an Interface
- * 
+ *
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
 public class InterfacePanel extends ElementPanel<CtInterface<?>> {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 8459706834704756568L;
 
@@ -47,6 +48,11 @@ public class InterfacePanel extends ElementPanel<CtInterface<?>> {
 				HEIGHT_BEFORE_ELEMENT_NAME + 20);
 		width = g.getFontMetrics().stringWidth(className);
 		height = HEIGHT_BEFORE_ELEMENT_NAME + 30;
+	}
+
+	@Override
+	public void accept(UMLContentPanel umlContentPanel) {
+		umlContentPanel.drawElementPanel(this);
 	}
 
 }

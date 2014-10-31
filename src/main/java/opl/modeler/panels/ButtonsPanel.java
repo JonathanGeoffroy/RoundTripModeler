@@ -20,19 +20,17 @@ import spoon.Launcher;
  * <li>a new attribute to selected class,</li>
  * <li>a new method to selected class / interface</li>
  * </ul>
- * 
+ *
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
 public class ButtonsPanel extends JPanel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -897261829968443656L;
 	private static final String ADD_CLASS = "Add Class";
 	private static final String ADD_INTERFACE = "Add Interface";
-	private static final String ADD_ATTRIBUTE = "Add Attribute";
-	private static final String ADD_METHOD = "Add Method";
 	private static final String ADD_ENUMERATION = "Add Enum";
 	private static final String RELOAD_CODE = "Reload Code";
 
@@ -44,9 +42,7 @@ public class ButtonsPanel extends JPanel {
 		super();
 		JButton addClass = new JButton(ADD_CLASS);
 		JButton addInterface = new JButton(ADD_INTERFACE);
-		JButton addAttribute = new JButton(ADD_ATTRIBUTE);
 		JButton addEnumeration = new JButton(ADD_ENUMERATION);
-		JButton addMethod = new JButton(ADD_METHOD);
 		JButton reloadCode = new JButton(RELOAD_CODE);
 
 		addClass.addActionListener(new OnClassAddedListener(uml, ADD_CLASS,
@@ -63,8 +59,6 @@ public class ButtonsPanel extends JPanel {
 		add(addClass);
 		add(addInterface);
 		add(addEnumeration);
-		add(addAttribute);
-		add(addMethod);
 		add(reloadCode);
 	}
 }

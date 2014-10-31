@@ -4,17 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import opl.modeler.UmlModeler;
+import opl.modeler.dialogboxes.AddFieldDialog;
+import opl.modeler.dialogboxes.AddMethodDialog;
 
 public class OnMethodAddedListener implements ActionListener {
 
+	private UmlModeler modeler;
+
 	public OnMethodAddedListener(UmlModeler modeler) {
-		super();
-		// TODO Auto-generated constructor stub
+		this.modeler = modeler;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		AddMethodDialog.showInputDialog(modeler);
 	}
 
 }

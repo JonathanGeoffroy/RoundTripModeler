@@ -9,32 +9,33 @@ import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
 
-public class AddFieldDialog {
+public class AddMethodDialog {
 
 	public static void showInputDialog(UmlModeler modeler) {
 		JLabel nameLabel = new JLabel("name:");
-		JTextField nameField = new JTextField();
-		JLabel typeLabel = new JLabel("type:");
-		JTextField typeField = new JTextField();
+		JTextField nameMethod = new JTextField();
+		JLabel typeLabel = new JLabel("return type:");
+		JTextField returnTypeMethod = new JTextField();
 
 		JPanel panel = new JPanel(new GridLayout(0, 2));
 		panel.add(nameLabel);
-		panel.add(nameField);
+		panel.add(nameMethod);
 		panel.add(typeLabel);
-		panel.add(typeField);
+		panel.add(returnTypeMethod);
 
 		JOptionPane optionPane = new JOptionPane();
 		optionPane.add(panel);
-		optionPane.createDialog("Add new Field").setVisible(true);
+		optionPane.createDialog("Add new Method").setVisible(true);
 
-		String nameString = nameField.getText();
-		String typeString = typeField.getText();
+		String nameString = nameMethod.getText();
+		String typeString = returnTypeMethod.getText();
 		if(nameString != null && typeString != null) {
 			try {
-				modeler.addField(nameString, typeString);
+				modeler.addMethod(nameString, typeString);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
+
 }

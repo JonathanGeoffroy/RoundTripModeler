@@ -12,29 +12,30 @@ import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
 import opl.modeler.views.ElementPanel;
 import opl.processors.FieldCreator;
+import opl.processors.MethodCreator;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtType;
 
 /**
  * The frame which contains the whole UML Modeler<br>
  * Simply instantiates each components and delegates UML model.
- * 
+ *
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
 public class UmlModeler extends JFrame {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private UMLContentPanel umlContentPanel;
 	private UmlPanel umlPanel;
 	private Launcher spoon;
-	
+
 	public UmlModeler(String title, Launcher spoon, Uml uml) throws HeadlessException {
 		super(title);
 		this.spoon = spoon;
-		
+
 		ButtonsPanel buttonsPanel = new ButtonsPanel(spoon, uml);
 		umlContentPanel = new UMLContentPanel(this);
 		umlPanel = new UmlPanel(uml, this);
@@ -61,6 +62,14 @@ public class UmlModeler extends JFrame {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedType = selectedPanel.getCtElement();
 		FieldCreator.addField(spoon, name, type, selectedType);
+		spoon.run();
+		notifySelectionChanged(selectedPanel);
+	}
+
+	public void addMethod(String name, String returnType) throws Exception {
+		ElementPanel<?> selectedPanel = umlPanel.getSelected();
+		CtType<?> selectedType = selectedPanel.getCtElement();
+		MethodCreator.addMethod(spoon, name, returnType, selectedType);
 		spoon.run();
 		notifySelectionChanged(selectedPanel);
 	}

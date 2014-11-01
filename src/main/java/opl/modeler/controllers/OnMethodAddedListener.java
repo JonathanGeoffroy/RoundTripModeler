@@ -15,7 +15,7 @@ public class OnMethodAddedListener implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		AddMethodDialog.showInputDialog(modeler);
+		new AddMethodDialog(modeler).showInputDialog("Add New Method");
 	}
 
 }

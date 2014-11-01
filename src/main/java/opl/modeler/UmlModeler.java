@@ -15,6 +15,7 @@ import opl.modeler.views.ElementPanel;
 import opl.processors.writers.FieldCreator;
 import opl.processors.writers.FieldRefactorer;
 import opl.processors.writers.MethodCreator;
+import opl.processors.writers.MethodRefactorer;
 import opl.processors.writers.TypeReferenceProcessor;
 import spoon.Launcher;
 import spoon.OutputType;
@@ -81,7 +82,7 @@ public class UmlModeler extends JFrame {
 		CtType<?> selectedCtType = selectedPanel.getCtElement();
 
 		FieldCreator fieldCreator = new FieldCreator(name, type, selectedCtType);
-		addComponent(fieldCreator);
+		runProcessor(fieldCreator);
 	}
 
 	public void addMethod(String name, String returnType) throws Exception {
@@ -89,25 +90,8 @@ public class UmlModeler extends JFrame {
 		CtType<?> selectedType = selectedPanel.getCtElement();
 
 		MethodCreator methodCreator = new MethodCreator(name, returnType, selectedType);
-		addComponent(methodCreator);
+		runProcessor(methodCreator);
 
-	}
-
-	/**
-	 * Convenience method for add{Class/Interface/Enumeration}<br>
-	 * process the creator processor and refresh the view part
-	 * 
-	 * @param creator
-	 *            the processor to run
-	 * @throws Exception
-	 *             processor's exception
-	 */
-	private void addComponent(TypeReferenceProcessor creator) throws Exception {
-		creator.setFactory(spoon.getFactory());
-		creator.process();
-
-		regenerateProject();
-		notifySelectionChanged(getSelectedElement());
 	}
 
 	/**
@@ -150,13 +134,30 @@ public class UmlModeler extends JFrame {
 
 	public void refactorField(CtField<?> field, String type, String name) throws Exception {
 		FieldRefactorer refactorerProcessor = new FieldRefactorer(field, type, name);
-		refactorerProcessor.setFactory(spoon.getFactory());
-		refactorerProcessor.process();
+		runProcessor(refactorerProcessor);
+	}
+
+	public void refactorMethod(CtMethod<?> method, String type, String name) throws Exception {
+		MethodRefactorer refactorerProcessor = new MethodRefactorer(method, type, name);
+		runProcessor(refactorerProcessor);
+	}
+	
+	/**
+	 * run the <code>processor</code>, regenerate the code and refresh the view part
+	 * 
+	 * @param processor
+	 *            the processor to run
+	 * @throws Exception
+	 *             processor's exception
+	 */
+	private void runProcessor(TypeReferenceProcessor processor) throws Exception {
+		processor.setFactory(spoon.getFactory());
+		processor.process();
 
 		regenerateProject();
 		notifySelectionChanged(getSelectedElement());
 	}
-
+	
 	/**
 	 * Regenerate the project source code by using a new SpoonCompiler
 	 * 

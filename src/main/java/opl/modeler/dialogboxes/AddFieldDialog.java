@@ -10,7 +10,7 @@ import opl.modeler.UmlModeler;
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
-public class AddFieldDialog extends FieldDialog {
+public class AddFieldDialog extends ComponentDialog {
 
 	public AddFieldDialog(UmlModeler modeler) {
 		super(modeler);
@@ -19,8 +19,8 @@ public class AddFieldDialog extends FieldDialog {
 	@Override
 	protected void onResultOk() {
 		try {
-			String nameString = this.nameField.getText();
-			String typeString = this.typeField.getText();
+			String nameString = this.nameTextField.getText();
+			String typeString = this.typeTextField.getText();
 			modeler.addField(nameString, typeString);
 		} catch (Exception e) {
 			e.printStackTrace();

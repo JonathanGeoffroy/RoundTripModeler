@@ -10,30 +10,30 @@ import javax.swing.JTextField;
 import opl.modeler.UmlModeler;
 
 /**
- * Show a dialog where user can enter a  Field
+ * Show a dialog where user can enter a Component {Field, Method}
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */
-public abstract class FieldDialog {
-	protected JTextField nameField;
-	protected JTextField typeField;
+public abstract class ComponentDialog {
+	protected JTextField nameTextField;
+	protected JTextField typeTextField;
 	private JPanel panel;
 	protected UmlModeler modeler;
 	
-	public FieldDialog(UmlModeler modeler) {
+	public ComponentDialog(UmlModeler modeler) {
 		this.modeler = modeler;
 		
 		JLabel nameLabel = new JLabel("name:");
-		nameField = new JTextField();
+		nameTextField = new JTextField();
 		JLabel typeLabel = new JLabel("return type:");
-		typeField = new JTextField();
+		typeTextField = new JTextField();
 
 		panel = new JPanel(new GridLayout(0, 2));
 		panel.add(nameLabel);
-		panel.add(nameField);
+		panel.add(nameTextField);
 		panel.add(typeLabel);
-		panel.add(typeField);
+		panel.add(typeTextField);
 	}
 	
 	public void showInputDialog(String title) {

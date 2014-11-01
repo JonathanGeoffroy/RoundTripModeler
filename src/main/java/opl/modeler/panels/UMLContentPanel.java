@@ -18,6 +18,7 @@ import opl.modeler.controllers.OnFieldAddedListener;
 import opl.modeler.controllers.OnFieldRefactored;
 import opl.modeler.controllers.OnFieldRemovedListener;
 import opl.modeler.controllers.OnMethodAddedListener;
+import opl.modeler.controllers.OnMethodRefactored;
 import opl.modeler.controllers.OnMethodRemovedListener;
 import opl.modeler.views.ClassPanel;
 import opl.modeler.views.ElementPanel;
@@ -189,12 +190,19 @@ public class UMLContentPanel extends JPanel {
 	 */
 	private JPanel createMethodsPanel(CtType<?> selected) {
 		JButton removeButton;
+		JButton refactorButton;
 		List<CtReference> processorReferences;
 		MethodReferencesProcessor processor;
-		
-		JPanel methods = new JPanel(new GridLayout(0, 2));
+		JPanel methods = new JPanel(new GridLayout(0, 3));
 		for(CtMethod<?> method : selected.getMethods()) {
 			methods.add(new Label(method.getSignature()));
+			
+			// Add Refactor button
+			refactorButton = new JButton("Refactor");
+			refactorButton.addActionListener(new OnMethodRefactored(modeler, method));
+			methods.add(refactorButton);
+			
+			// Add Remove button
 			removeButton = new JButton("X");
 			removeButton.addActionListener(new OnMethodRemovedListener(modeler, method));
 			removeButton.setPreferredSize(new Dimension(20, 20));
@@ -209,6 +217,8 @@ public class UMLContentPanel extends JPanel {
 			processorReferences = processor.getReferences();
 			if(!processorReferences.isEmpty()) {
 				removeButton.setEnabled(false);
+				removeButton.setToolTipText("This method is used by: " + processorReferences);
+				refactorButton.setEnabled(false);
 				removeButton.setToolTipText("This method is used by: " + processorReferences);
 			}
 		}

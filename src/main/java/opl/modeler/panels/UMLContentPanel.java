@@ -2,6 +2,8 @@ package opl.modeler.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.util.List;
@@ -140,26 +142,33 @@ public class UMLContentPanel extends JPanel {
 	 * @return the JPanel
 	 */
 	private JPanel createFieldsPanel(CtType<?> selected) {
-		JPanel fields = new JPanel(new GridLayout(0, 3));
 		JButton removeButton;
 		JButton refactorButton;
 		
 		List<CtReference> processorReferences;
 		FieldReferencesProcessor processor;
-
+		
+		GridBagConstraints gridConstraint = new GridBagConstraints();
+		gridConstraint.fill = GridBagConstraints.CENTER;
+		gridConstraint.gridy = 0;
+		JPanel fields = new JPanel(new GridBagLayout());
+		fields.setPreferredSize(new Dimension(400, 200));
+		
 		for(CtField<?> field : selected.getFields()) {
-			fields.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+			gridConstraint.gridx = 0;
+			fields.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()), gridConstraint);
 			
 			// Add Refactor button
-			refactorButton = new JButton("Refactor");
+			gridConstraint.gridx = 1;
+			refactorButton = new JButton("Refact");
 			refactorButton.addActionListener(new OnFieldRefactored(modeler, field));
-			fields.add(refactorButton);
+			fields.add(refactorButton, gridConstraint);
 			
 			// Add Remove button
+			gridConstraint.gridx = 2;
 			removeButton = new JButton("X");
 			removeButton.addActionListener(new OnFieldRemovedListener(modeler, field));
-			removeButton.setPreferredSize(new Dimension(20, 20));
-			fields.add(removeButton);
+			fields.add(removeButton, gridConstraint);
 
 			// Check if the field is used
 			// If it is, user can't remove this field
@@ -172,11 +181,17 @@ public class UMLContentPanel extends JPanel {
 				refactorButton.setEnabled(false);
 				removeButton.setToolTipText("This field is used by: " + processorReferences);
 			}
-
+			
+			gridConstraint.gridy++;
 		}
+		
+		// Add Field button
+		gridConstraint.gridx = 0;
+		gridConstraint.gridy++;
+		gridConstraint.gridwidth = 4;
 		JButton addFieldButton = new JButton("Add Field");
 		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
-		fields.add(addFieldButton);
+		fields.add(addFieldButton, gridConstraint);
 
 		return fields;
 	}
@@ -193,20 +208,29 @@ public class UMLContentPanel extends JPanel {
 		JButton refactorButton;
 		List<CtReference> processorReferences;
 		MethodReferencesProcessor processor;
-		JPanel methods = new JPanel(new GridLayout(0, 3));
+		
+		GridBagConstraints gridConstraint = new GridBagConstraints();
+		gridConstraint.fill = GridBagConstraints.CENTER;
+		gridConstraint.gridy = 0;
+		JPanel methods = new JPanel(new GridBagLayout());
+		methods.setPreferredSize(new Dimension(400, 200));
+
 		for(CtMethod<?> method : selected.getMethods()) {
-			methods.add(new Label(method.getSignature()));
+			// Add method signature
+			gridConstraint.gridx = 0;
+			methods.add(new Label(method.getSignature()), gridConstraint);
 			
 			// Add Refactor button
-			refactorButton = new JButton("Refactor");
+			gridConstraint.gridx = 1;
+			refactorButton = new JButton("Refact");
 			refactorButton.addActionListener(new OnMethodRefactored(modeler, method));
-			methods.add(refactorButton);
+			methods.add(refactorButton, gridConstraint);
 			
 			// Add Remove button
+			gridConstraint.gridx = 2;
 			removeButton = new JButton("X");
 			removeButton.addActionListener(new OnMethodRemovedListener(modeler, method));
-			removeButton.setPreferredSize(new Dimension(20, 20));
-			methods.add(removeButton);
+			methods.add(removeButton, gridConstraint);
 			
 			// Check if the field is used
 			// If it is, user can't remove this field
@@ -221,10 +245,17 @@ public class UMLContentPanel extends JPanel {
 				refactorButton.setEnabled(false);
 				removeButton.setToolTipText("This method is used by: " + processorReferences);
 			}
+			
+			gridConstraint.gridy++;
 		}
+		
+		// Add Method button
+		gridConstraint.gridx = 0;
+		gridConstraint.gridy++;
+		gridConstraint.gridwidth = 4;
 		JButton addMethodButton = new JButton("Add Method");
 		addMethodButton.addActionListener(new OnMethodAddedListener(modeler));
-		methods.add(addMethodButton);
+		methods.add(addMethodButton, gridConstraint);
 
 		return methods;
 	}

@@ -4,7 +4,7 @@ import java.io.File;
 
 import opl.modeler.UmlModeler;
 import opl.modeler.model.Uml;
-import opl.processors.UmlFinder;
+import opl.processors.readers.UmlFinder;
 import spoon.Launcher;
 import spoon.support.compiler.FileSystemFolder;
 

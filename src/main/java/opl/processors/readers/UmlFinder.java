@@ -1,4 +1,4 @@
-package opl.processors;
+package opl.processors.readers;
 
 import java.util.List;
 

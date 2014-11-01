@@ -1,4 +1,4 @@
-package opl.processors;
+package opl.processors.writers;
 
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtType;

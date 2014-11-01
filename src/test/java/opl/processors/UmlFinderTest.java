@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import opl.modeler.model.Uml;
+import opl.processors.readers.UmlFinder;
 
 import org.junit.Test;
 

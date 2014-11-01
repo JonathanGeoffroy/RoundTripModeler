@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import opl.modeler.model.Uml;
-import opl.processors.UmlFinder;
+import opl.processors.readers.UmlFinder;
 import spoon.Launcher;
 
 /**

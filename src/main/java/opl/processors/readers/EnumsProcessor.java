@@ -1,4 +1,4 @@
-package opl.processors;
+package opl.processors.readers;
 
 import spoon.reflect.declaration.CtEnum;
 

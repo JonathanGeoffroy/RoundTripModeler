@@ -1,4 +1,4 @@
-package opl.processors;
+package opl.processors.writers;
 
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCodeSnippetStatement;

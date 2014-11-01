@@ -2,8 +2,8 @@ package opl.modeler.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
@@ -28,18 +28,12 @@ public class OnClassNameChangedListener implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		// Find the File of the renamed element
-		File classFile = element.getCtElement().getPosition().getFile();
-		
-		// Rename the element
-		String oldName = element.getCtElement().getQualifiedName();
-		String newName = name.getText();
-		element.getCtElement().setSimpleName(newName);
-		
-		// Remove the element from the File System
-		classFile.delete();
-		
-		modeler.notifySelectionRenamed(oldName, element.getCtElement().getQualifiedName());
+		try {
+			modeler.rename(element.getCtElement(), name.getText());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Unable to rename component", "Unable to Rename", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
 	}
 
 }

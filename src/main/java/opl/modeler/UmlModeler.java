@@ -12,6 +12,7 @@ import opl.modeler.panels.ButtonsPanel;
 import opl.modeler.panels.UMLContentPanel;
 import opl.modeler.panels.UmlPanel;
 import opl.modeler.views.ElementPanel;
+import opl.processors.writers.ElementRenamer;
 import opl.processors.writers.FieldCreator;
 import opl.processors.writers.FieldRefactorer;
 import opl.processors.writers.MethodCreator;
@@ -20,6 +21,7 @@ import opl.processors.writers.TypeReferenceProcessor;
 import spoon.Launcher;
 import spoon.OutputType;
 import spoon.compiler.SpoonCompiler;
+import spoon.processing.AbstractManualProcessor;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
@@ -63,7 +65,8 @@ public class UmlModeler extends JFrame {
 		pack();
 	}
 
-	public void notifySelectionRenamed(String oldName, String newName) {
+	public void notifySelectionRenamed(String oldName, String newName) throws Exception {
+		regenerateProject();
 		umlPanel.notifySelectionRenamed(oldName, newName);
 		umlContentPanel.notifySelectionChanged(getSelectedElement());
 	}
@@ -73,7 +76,8 @@ public class UmlModeler extends JFrame {
 		umlContentPanel.notifySelectionChanged(selected);
 	}
 
-	public void notifyElementRemoved(ElementPanel<?> removed) {
+	public void notifyElementRemoved(ElementPanel<?> removed) throws Exception {
+		regenerateProject();
 		umlPanel.onElementRemoved(removed);
 	}
 
@@ -141,7 +145,14 @@ public class UmlModeler extends JFrame {
 		MethodRefactorer refactorerProcessor = new MethodRefactorer(method, type, name);
 		runProcessor(refactorerProcessor);
 	}
-	
+
+	public void rename(CtType<?> element, String newName) throws Exception {
+		String oldName = element.getQualifiedName();
+		
+		ElementRenamer elementRenamer = new ElementRenamer(element, newName);
+		runProcessor(elementRenamer);
+		notifySelectionRenamed(oldName, newName);
+	}
 	/**
 	 * run the <code>processor</code>, regenerate the code and refresh the view part
 	 * 
@@ -150,14 +161,14 @@ public class UmlModeler extends JFrame {
 	 * @throws Exception
 	 *             processor's exception
 	 */
-	private void runProcessor(TypeReferenceProcessor processor) throws Exception {
+	private void runProcessor(AbstractManualProcessor processor) throws Exception {
 		processor.setFactory(spoon.getFactory());
 		processor.process();
 
 		regenerateProject();
 		notifySelectionChanged(getSelectedElement());
 	}
-	
+
 	/**
 	 * Regenerate the project source code by using a new SpoonCompiler
 	 * 

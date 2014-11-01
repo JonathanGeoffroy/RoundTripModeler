@@ -10,7 +10,12 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.ReferenceFilter;
-
+/**
+ *  Find all elements which reference a field
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
 public class MethodReferencesProcessor extends AbstractProcessor<CtClass<?>> {
 	private List<CtReference> references;
 	private CtMethod<?> method;
@@ -21,7 +26,7 @@ public class MethodReferencesProcessor extends AbstractProcessor<CtClass<?>> {
 	}
 
 	public void process(CtClass<?> element) {
-		System.out.println("MethodReferencesProcessor called");
+		if(method == null) return;
 		CtExecutableReference<?> methodReference = method.getReference();
 		MethodReferenceFilter filter = new MethodReferenceFilter(methodReference);
 

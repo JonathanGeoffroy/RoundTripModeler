@@ -1,9 +1,7 @@
 package opl.modeler.panels;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -69,7 +67,9 @@ public class UmlPanel extends JPanel implements Observer {
 		String elementQualifiedName = elementType.getQualifiedName();
 		
 		if(elementPanels.containsKey(elementQualifiedName)) {
-			elementPanels.get(elementQualifiedName).setCtElement(elementType);
+			elementPanel = elementPanels.get(elementQualifiedName); // Find the real reference of the drawn ElementPanel
+			elementPanel.setCtElement(elementType);
+			elementPanel.revalidate();
 		}
 		else {
 			elementPanel.setBounds((int)(Math.random() * 700), (int)(Math.random() * 500), 100, 100);

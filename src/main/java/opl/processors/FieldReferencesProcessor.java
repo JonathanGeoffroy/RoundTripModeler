@@ -64,7 +64,6 @@ class FieldReferenceFilter implements ReferenceFilter<CtFieldReference> {
 	}
 	
 	public boolean matches(CtFieldReference reference) {
-		System.out.println("FieldReferenceFilter called");
 		return field.getReference().equals(reference);
 	}
 

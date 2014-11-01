@@ -1,43 +1,44 @@
 package opl.processors;
 
-import spoon.Launcher;
+import spoon.reflect.code.CtBlock;
+import spoon.reflect.code.CtCodeSnippetStatement;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.support.reflect.declaration.CtMethodImpl;
-import spoon.support.reflect.reference.CtTypeReferenceImpl;
 
-public class MethodCreator {
+/**
+ * Processor which creates a method and add it to this parent Compilation Unit<br>
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
+public class MethodCreator extends ComponentCreator {
 
-	public static void addMethod(Launcher spoon, String name, String returnType, CtType<?> parent)
-			throws ClassNotFoundException {
-		CtTypeReference typeReference;
-		Factory factory = spoon.getFactory();
+	public MethodCreator(String name, String type, CtType<?> parent) {
+		super(name, type, parent);
+	}
 
-		if(returnType.equals("void")) {
-			typeReference = new CtTypeReferenceImpl();
-			typeReference.setSimpleName(CtTypeReference.NULL_TYPE_NAME);
-		} else {
-			// Try to find the class into project
-			CtType<?> ctType = factory.Class().get(returnType);
+	public void process() {
+		CtTypeReference typeReference = getTypeReference(type);
+		Factory factory = getFactory();
 
-			if(ctType != null) {
-				typeReference = ctType.getReference();
-			}
-			else { // if the searched class isn't into the project, try to find it into classloader
-				ClassLoader loader = factory.getClass().getClassLoader();
-				Class<?> c = loader.loadClass(returnType);
-				typeReference = factory.Class().createReference(c);
-			}
-		}
-
-		CtMethod<?> method = new CtMethodImpl<Object>();
+		CtMethod<?> method = factory.Core().createMethod();
 		method.setSimpleName(name);
 		method.setType(typeReference);
 		method.setParent(parent);
 		method.setVisibility(ModifierKind.PUBLIC);
-		factory.Method().create(parent, method, true);
+		
+		if(parent instanceof CtClass<?>) {
+		CtCodeSnippetStatement returnSnippet = factory.Code()
+				.createCodeSnippetStatement("return null");
+		CtBlock methodBody = factory.Core().createBlock();
+		methodBody.addStatement(returnSnippet);
+		method.setBody(methodBody);
+		}
+		
+		parent.addMethod(method);
 	}
 }

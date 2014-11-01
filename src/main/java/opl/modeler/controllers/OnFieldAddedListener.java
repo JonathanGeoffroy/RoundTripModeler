@@ -15,7 +15,7 @@ public class OnFieldAddedListener implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		AddFieldDialog.showInputDialog(modeler);
+		new AddFieldDialog(modeler).showInputDialog("Add new Field");
 	}
 
 }

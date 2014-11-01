@@ -26,7 +26,6 @@ public class OnCodeReloadedListener implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		try {
-			spoon.run();
 			UmlFinder.runSpoonProcessors(spoon, uml);
 			uml.onCodeReloaded();
 		} catch (Exception e) {

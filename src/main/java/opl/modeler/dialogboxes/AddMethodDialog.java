@@ -9,6 +9,13 @@ import javax.swing.JTextField;
 
 import opl.modeler.UmlModeler;
 
+
+/**
+ * Show a dialog where user can enter a new Method
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
 public class AddMethodDialog {
 
 	public static void showInputDialog(UmlModeler modeler) {
@@ -33,6 +40,7 @@ public class AddMethodDialog {
 				try {
 					modeler.addMethod(nameString, typeString);
 				} catch (Exception e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "The specified type doesn't exist", "Type not found", JOptionPane.ERROR_MESSAGE);
 				}
 			}

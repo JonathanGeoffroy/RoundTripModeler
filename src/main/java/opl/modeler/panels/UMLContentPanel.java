@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import opl.modeler.UmlModeler;
 import opl.modeler.controllers.OnClassNameChangedListener;
 import opl.modeler.controllers.OnFieldAddedListener;
+import opl.modeler.controllers.OnFieldRefactored;
 import opl.modeler.controllers.OnFieldRemovedListener;
 import opl.modeler.controllers.OnMethodAddedListener;
 import opl.modeler.controllers.OnMethodRemovedListener;
@@ -63,7 +64,7 @@ public class UMLContentPanel extends JPanel {
 		CtType<?> selectedCtType = selected.getCtElement();
 
 		JPanel name = createNamePanel(selected);
-		JPanel attributes = createAttributesPanel(selectedCtType);
+		JPanel attributes = createFieldsPanel(selectedCtType);
 		JPanel methods = createMethodsPanel(selectedCtType);
 
 		JPanel components = new JPanel();
@@ -137,18 +138,27 @@ public class UMLContentPanel extends JPanel {
 	 *            the selected panel
 	 * @return the JPanel
 	 */
-	private JPanel createAttributesPanel(CtType<?> selected) {
-		JPanel attributes = new JPanel(new GridLayout(0, 2));
+	private JPanel createFieldsPanel(CtType<?> selected) {
+		JPanel fields = new JPanel(new GridLayout(0, 3));
 		JButton removeButton;
+		JButton refactorButton;
+		
 		List<CtReference> processorReferences;
 		FieldReferencesProcessor processor;
 
 		for(CtField<?> field : selected.getFields()) {
-			attributes.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+			fields.add(new Label(field.getSimpleName() + " : " + field.getType().getSimpleName()));
+			
+			// Add Refactor button
+			refactorButton = new JButton("Refactor");
+			refactorButton.addActionListener(new OnFieldRefactored(modeler, field));
+			fields.add(refactorButton);
+			
+			// Add Remove button
 			removeButton = new JButton("X");
 			removeButton.addActionListener(new OnFieldRemovedListener(modeler, field));
 			removeButton.setPreferredSize(new Dimension(20, 20));
-			attributes.add(removeButton);
+			fields.add(removeButton);
 
 			// Check if the field is used
 			// If it is, user can't remove this field
@@ -158,14 +168,16 @@ public class UMLContentPanel extends JPanel {
 			if(!processorReferences.isEmpty()) {
 				removeButton.setEnabled(false);
 				removeButton.setToolTipText("This field is used by: " + processorReferences);
+				refactorButton.setEnabled(false);
+				removeButton.setToolTipText("This field is used by: " + processorReferences);
 			}
 
 		}
 		JButton addFieldButton = new JButton("Add Field");
 		addFieldButton.addActionListener(new OnFieldAddedListener(modeler));
-		attributes.add(addFieldButton);
+		fields.add(addFieldButton);
 
-		return attributes;
+		return fields;
 	}
 
 	/**

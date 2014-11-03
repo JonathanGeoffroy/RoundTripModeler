@@ -152,7 +152,7 @@ public class UMLContentPanel extends JPanel {
 		gridConstraint.fill = GridBagConstraints.CENTER;
 		gridConstraint.gridy = 0;
 		JPanel fields = new JPanel(new GridBagLayout());
-		fields.setPreferredSize(new Dimension(400, 200));
+		fields.setPreferredSize(new Dimension(390, 200));
 		
 		for(CtField<?> field : selected.getFields()) {
 			gridConstraint.gridx = 0;
@@ -213,7 +213,7 @@ public class UMLContentPanel extends JPanel {
 		gridConstraint.fill = GridBagConstraints.CENTER;
 		gridConstraint.gridy = 0;
 		JPanel methods = new JPanel(new GridBagLayout());
-		methods.setPreferredSize(new Dimension(400, 200));
+		methods.setPreferredSize(new Dimension(390, 200));
 
 		for(CtMethod<?> method : selected.getMethods()) {
 			// Add method signature

@@ -8,7 +8,6 @@ import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtInterface;
-import spoon.reflect.declaration.ModifierKind;
 
 /**
  * Model of a UML<br>

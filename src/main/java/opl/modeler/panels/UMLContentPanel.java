@@ -159,7 +159,7 @@ public class UMLContentPanel extends JPanel {
 			
 			// Add Refactor button
 			gridConstraint.gridx = 1;
-			refactorButton = new JButton("Refact");
+			refactorButton = new JButton("Refactor");
 			refactorButton.addActionListener(new OnFieldRefactored(modeler, field));
 			fields.add(refactorButton, gridConstraint);
 			
@@ -221,7 +221,7 @@ public class UMLContentPanel extends JPanel {
 			
 			// Add Refactor button
 			gridConstraint.gridx = 1;
-			refactorButton = new JButton("Refact");
+			refactorButton = new JButton("Refactor");
 			refactorButton.addActionListener(new OnMethodRefactored(modeler, method));
 			methods.add(refactorButton, gridConstraint);
 			

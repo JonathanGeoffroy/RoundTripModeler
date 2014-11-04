@@ -22,7 +22,9 @@ import spoon.OutputType;
 import spoon.compiler.SpoonCompiler;
 import spoon.processing.AbstractManualProcessor;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtInterface;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.ModifierKind;
@@ -89,7 +91,23 @@ public class UmlModeler extends JFrame {
 		spoon.run();
 		regenerateProject();
 	}
-	
+
+	public void addEnumeration(String elementName) throws Exception {
+		CtEnum<?> createdEnumeration = spoon.getFactory().Core().createEnum();
+		//new EnumFactory(spoon.getFactory()).create(qualifiedName);
+		createdEnumeration.setSimpleName(elementName);
+		createdEnumeration.setVisibility(ModifierKind.PUBLIC);
+		uml.addEnumeration(createdEnumeration);
+	}
+
+	public void addInterface(String elementName) throws Exception {
+		CtInterface<?> createdInterface = spoon.getFactory().Core().createInterface();
+		createdInterface.setSimpleName(elementName);
+		createdInterface.setVisibility(ModifierKind.PUBLIC);
+		uml.addInterface(createdInterface);
+		spoon.run();
+	}
+
 	public void addField(String name, String type) throws Exception {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedCtType = selectedPanel.getCtElement();
@@ -157,7 +175,7 @@ public class UmlModeler extends JFrame {
 
 	public void rename(CtType<?> element, String newName) throws Exception {
 		String oldName = element.getQualifiedName();
-		
+
 		ElementRenamer elementRenamer = new ElementRenamer(element, newName);
 		runProcessor(elementRenamer);
 		notifySelectionRenamed(oldName, newName);
@@ -201,15 +219,5 @@ public class UmlModeler extends JFrame {
 
 	public ElementPanel<?> getSelectedElement() {
 		return umlPanel.getSelected();
-	}
-
-	public void addEnumeration(String elementName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void addInterface(String elementName) {
-		// TODO Auto-generated method stub
-		
 	}
 }

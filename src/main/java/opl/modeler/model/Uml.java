@@ -89,14 +89,9 @@ public class Uml extends Observable {
 	 *            [package[.package...]].InterfaceName
 	 * @throws Exception 
 	 */
-	public void addInterface(String qualifiedName) throws Exception {
-		CtInterface<?> createdInterface = spoon.getFactory().Core().createInterface();
-				//new InterfaceFactory(spoon.getFactory()).create(qualifiedName);
-		createdInterface.setSimpleName(qualifiedName);
-		createdInterface.setVisibility(ModifierKind.PUBLIC);
-		interfaces.add(createdInterface);
-		spoon.run();
-		notifyInterfaceAdded(createdInterface);
+	public void addInterface(CtInterface<?> ctInterface) throws Exception {
+		interfaces.add(ctInterface);
+		notifyInterfaceAdded(ctInterface);
 	}
 
 	/**
@@ -106,13 +101,9 @@ public class Uml extends Observable {
 	 *            the qualified name of the created enumeration: [package[.package...]].EnumsName
 	 * @throws Exception 
 	 */
-	public void addEnumeration(String qualifiedName) throws Exception {
-		CtEnum<?> createdEnumeration = spoon.getFactory().Core().createEnum();
-				//new EnumFactory(spoon.getFactory()).create(qualifiedName);
-		createdEnumeration.setSimpleName(qualifiedName);
-		createdEnumeration.setVisibility(ModifierKind.PUBLIC);
-		enumerations.add(createdEnumeration);
-		notifyEnumAdded(createdEnumeration);
+	public void addEnumeration(CtEnum<?> ctEnum) throws Exception {
+		enumerations.add(ctEnum);
+		notifyEnumAdded(ctEnum);
 	}
 	
 	public List<CtClass<?>> getClasses() {

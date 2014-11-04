@@ -86,7 +86,7 @@ public class UmlModeler extends JFrame {
 	}
 
 	public void addClass(String qualifiedName) throws Exception {
-		CtClass<?> createdClass = spoon.getFactory().Class().create(qualifiedName);
+		CtClass<?> createdClass = spoon.getFactory().Class().create(getSimpleName(qualifiedName));
 		createdClass.setVisibility(ModifierKind.PUBLIC);
 		uml.addClass(createdClass);
 		spoon.run();
@@ -95,30 +95,56 @@ public class UmlModeler extends JFrame {
 
 	public void addEnumeration(String elementName) throws Exception {
 		CtEnum<?> createdEnumeration = spoon.getFactory().Core().createEnum();
-		createdEnumeration.setSimpleName(elementName);
-		createdEnumeration.setVisibility(ModifierKind.PUBLIC);
-		
-		CtPackage pack = spoon.getFactory().Package().getOrCreate("foo");
-		createdEnumeration.setParent(pack);
-		
+		getOrCreatePackageElement(createdEnumeration, elementName);
 		uml.addEnumeration(createdEnumeration);
+		
 		spoon.run();
 		regenerateProject();
 	}
 
 	public void addInterface(String elementName) throws Exception {
 		CtInterface<?> createdInterface = spoon.getFactory().Core().createInterface();
-		createdInterface.setSimpleName(elementName);
-		createdInterface.setVisibility(ModifierKind.PUBLIC);
-		
-		CtPackage pack = spoon.getFactory().Package().getOrCreate("foo");
-		createdInterface.setParent(pack);
-				
+		getOrCreatePackageElement(createdInterface, elementName);
 		uml.addInterface(createdInterface);
+		
 		spoon.run();
 		regenerateProject();
 	}
 
+	public void getOrCreatePackageElement(CtType<?> type, String typeName) {
+		type.setSimpleName(getSimpleName(typeName));
+		type.setVisibility(ModifierKind.PUBLIC);
+		
+		CtPackage pack = getPackage(typeName);
+		type.setParent(pack);
+	}
+	
+	private String getSimpleName(String qualifiedName) {
+		int lastIndexOfDot = qualifiedName.lastIndexOf('.');
+		String simpleName;
+		if(lastIndexOfDot == -1) { // No package
+			simpleName = qualifiedName;
+		}
+		else {
+			simpleName = qualifiedName.substring(lastIndexOfDot + 1, qualifiedName.length());
+		}
+		return simpleName;
+	}
+	
+	private CtPackage getPackage(String cuQualifiedName) {
+		CtPackage ctPackage = null;
+		String packageName;
+		int lastIndexOfDot = cuQualifiedName.lastIndexOf('.');
+		if(lastIndexOfDot == -1) { // No package
+			packageName = CtPackage.TOP_LEVEL_PACKAGE_NAME;
+		}
+		else {
+			packageName = cuQualifiedName.substring(0, lastIndexOfDot);
+		}
+		ctPackage = spoon.getFactory().Package().getOrCreate(packageName);
+		return ctPackage;
+	}
+	
 	public void addField(String name, String type) throws Exception {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedCtType = selectedPanel.getCtElement();

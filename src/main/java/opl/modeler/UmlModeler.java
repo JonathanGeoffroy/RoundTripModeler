@@ -26,6 +26,7 @@ import spoon.reflect.declaration.CtEnum;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtInterface;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.ModifierKind;
 
@@ -94,18 +95,28 @@ public class UmlModeler extends JFrame {
 
 	public void addEnumeration(String elementName) throws Exception {
 		CtEnum<?> createdEnumeration = spoon.getFactory().Core().createEnum();
-		//new EnumFactory(spoon.getFactory()).create(qualifiedName);
 		createdEnumeration.setSimpleName(elementName);
 		createdEnumeration.setVisibility(ModifierKind.PUBLIC);
+		
+		CtPackage pack = spoon.getFactory().Package().getOrCreate("foo");
+		createdEnumeration.setParent(pack);
+		
 		uml.addEnumeration(createdEnumeration);
+		spoon.run();
+		regenerateProject();
 	}
 
 	public void addInterface(String elementName) throws Exception {
 		CtInterface<?> createdInterface = spoon.getFactory().Core().createInterface();
 		createdInterface.setSimpleName(elementName);
 		createdInterface.setVisibility(ModifierKind.PUBLIC);
+		
+		CtPackage pack = spoon.getFactory().Package().getOrCreate("foo");
+		createdInterface.setParent(pack);
+				
 		uml.addInterface(createdInterface);
 		spoon.run();
+		regenerateProject();
 	}
 
 	public void addField(String name, String type) throws Exception {
@@ -206,7 +217,7 @@ public class UmlModeler extends JFrame {
 		File outputDirectory = spoon.getFactory().getEnvironment().getDefaultFileGenerator().getOutputDirectory();
 		compiler.setOutputDirectory(outputDirectory);
 		compiler.setDestinationDirectory(outputDirectory);
-		compiler.generateProcessedSourceFiles(OutputType.COMPILATION_UNITS);
+		compiler.generateProcessedSourceFiles(OutputType.CLASSES);
 	}
 
 	public Launcher getSpoon() {

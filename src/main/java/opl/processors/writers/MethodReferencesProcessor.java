@@ -10,6 +10,7 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.ReferenceFilter;
+
 /**
  *  Find all elements which reference a field
  * 

@@ -7,7 +7,7 @@ import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
- * Processor which creates a field and add it to this parent Compilation Unit
+ * Processor which creates a field and adds it to its parent Compilation Unit
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *

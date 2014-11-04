@@ -1,6 +1,6 @@
 package opl.modeler.controllers;
 
-import opl.modeler.model.Uml;
+import opl.modeler.UmlModeler;
 
 /**
  * Listener called when user click on "add Enum" button
@@ -10,12 +10,12 @@ import opl.modeler.model.Uml;
  */
 public class OnEnumerationAddedListener extends OnElementAddedListener {
 
-	public OnEnumerationAddedListener(Uml uml, String title, String message) {
-		super(uml, title, message);
+	public OnEnumerationAddedListener(UmlModeler umlModeler, String title, String message) {
+		super(umlModeler, title, message);
 	}
 
 	@Override
 	public void addElement(String elementName) throws Exception {
-		uml.addEnumeration(elementName);
+		umlModeler.addEnumeration(elementName);
 	}
 }

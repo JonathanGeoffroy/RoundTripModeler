@@ -7,6 +7,12 @@ import opl.modeler.UmlModeler;
 import opl.modeler.dialogboxes.RefactorFieldDialog;
 import spoon.reflect.declaration.CtField;
 
+/**
+ * Listener called when user click on "Refact" button for a field.
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
 public class OnFieldRefactored implements ActionListener {
 
 		private UmlModeler modeler;

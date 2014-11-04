@@ -10,7 +10,7 @@ import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
- * Processor which creates a method and add it to this parent Compilation Unit<br>
+ * Processor which creates a method and adds it to its parent Compilation Unit<br>
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *

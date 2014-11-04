@@ -11,7 +11,7 @@ import spoon.support.compiler.FileSystemFolder;
 /**
  * Entry Point of the software<br>
  * Run Spoon library to find all CtType (i.e. classes, interfaces, enumerations)
- * of the project
+ * of the project and display them in a UML modeler.
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *

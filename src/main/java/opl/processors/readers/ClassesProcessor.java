@@ -3,7 +3,8 @@ package opl.processors.readers;
 import spoon.reflect.declaration.CtClass;
 
 /**
- * use Spoon library to find all classes of the project<br>
+ * Use Spoon library to find all classes of the project<br>
+ * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *
  */

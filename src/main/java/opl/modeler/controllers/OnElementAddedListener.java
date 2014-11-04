@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import opl.modeler.model.Uml;
+import opl.modeler.UmlModeler;
 
 /**
  * Listener called when user click on "add" button<br>
@@ -21,7 +21,7 @@ public abstract class OnElementAddedListener implements ActionListener {
 	/**
 	 * The uml model where to add an element
 	 */
-	protected Uml uml;
+	protected UmlModeler umlModeler;
 	
 	/**
 	 * The title of the dialog box opened when user click on button
@@ -33,9 +33,9 @@ public abstract class OnElementAddedListener implements ActionListener {
 	 */
 	private String message;
 
-	public OnElementAddedListener(Uml uml, String title, String message) {
+	public OnElementAddedListener(UmlModeler umlModeler, String title, String message) {
 		super();
-		this.uml = uml;
+		this.umlModeler = umlModeler;
 		this.title = title;
 		this.message = message;
 	}

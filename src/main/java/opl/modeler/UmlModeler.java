@@ -17,14 +17,15 @@ import opl.processors.writers.FieldCreator;
 import opl.processors.writers.FieldRefactorer;
 import opl.processors.writers.MethodCreator;
 import opl.processors.writers.MethodRefactorer;
-import opl.processors.writers.TypeReferenceProcessor;
 import spoon.Launcher;
 import spoon.OutputType;
 import spoon.compiler.SpoonCompiler;
 import spoon.processing.AbstractManualProcessor;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
+import spoon.reflect.declaration.ModifierKind;
 
 /**
  * The frame which contains the whole UML Modeler<br>
@@ -48,7 +49,7 @@ public class UmlModeler extends JFrame {
 		this.spoon = spoon;
 		this.uml = uml;
 
-		ButtonsPanel buttonsPanel = new ButtonsPanel(spoon, uml);
+		ButtonsPanel buttonsPanel = new ButtonsPanel(spoon, this);
 		umlContentPanel = new UMLContentPanel(this);
 		umlPanel = new UmlPanel(uml, this);
 
@@ -81,6 +82,14 @@ public class UmlModeler extends JFrame {
 		umlPanel.onElementRemoved(removed);
 	}
 
+	public void addClass(String qualifiedName) throws Exception {
+		CtClass<?> createdClass = spoon.getFactory().Class().create(qualifiedName);
+		createdClass.setVisibility(ModifierKind.PUBLIC);
+		uml.addClass(createdClass);
+		spoon.run();
+		regenerateProject();
+	}
+	
 	public void addField(String name, String type) throws Exception {
 		ElementPanel<?> selectedPanel = umlPanel.getSelected();
 		CtType<?> selectedCtType = selectedPanel.getCtElement();
@@ -192,5 +201,15 @@ public class UmlModeler extends JFrame {
 
 	public ElementPanel<?> getSelectedElement() {
 		return umlPanel.getSelected();
+	}
+
+	public void addEnumeration(String elementName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addInterface(String elementName) {
+		// TODO Auto-generated method stub
+		
 	}
 }

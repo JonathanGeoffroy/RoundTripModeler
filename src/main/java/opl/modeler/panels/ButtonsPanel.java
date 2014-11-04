@@ -4,11 +4,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import opl.modeler.UmlModeler;
 import opl.modeler.controllers.OnClassAddedListener;
 import opl.modeler.controllers.OnCodeReloadedListener;
 import opl.modeler.controllers.OnEnumerationAddedListener;
 import opl.modeler.controllers.OnInterfaceAddedListener;
-import opl.modeler.model.Uml;
 import spoon.Launcher;
 
 /**
@@ -38,20 +38,20 @@ public class ButtonsPanel extends JPanel {
 	private static final String ADD_INTERFACE_MESSAGE = "Please enter the qualified name of the new interface";
 	private static final String ADD_ENUMERATION_MESSAGE = "Please enter the qualified name of the new enumeration";
 
-	public ButtonsPanel(Launcher spoon, Uml uml) {
+	public ButtonsPanel(Launcher spoon, UmlModeler umlModeler) {
 		super();
 		JButton addClass = new JButton(ADD_CLASS);
 		JButton addInterface = new JButton(ADD_INTERFACE);
 		JButton addEnumeration = new JButton(ADD_ENUMERATION);
 		JButton reloadCode = new JButton(RELOAD_CODE);
 
-		addClass.addActionListener(new OnClassAddedListener(uml, ADD_CLASS,
+		addClass.addActionListener(new OnClassAddedListener(umlModeler, ADD_CLASS,
 				ADD_CLASS_MESSAGE));
-		addInterface.addActionListener(new OnInterfaceAddedListener(uml,
+		addInterface.addActionListener(new OnInterfaceAddedListener(umlModeler,
 				ADD_INTERFACE, ADD_INTERFACE_MESSAGE));
-		addEnumeration.addActionListener(new OnEnumerationAddedListener(uml,
+		addEnumeration.addActionListener(new OnEnumerationAddedListener(umlModeler,
 				ADD_ENUMERATION, ADD_ENUMERATION_MESSAGE));
-		reloadCode.addActionListener(new OnCodeReloadedListener(spoon, uml));
+		reloadCode.addActionListener(new OnCodeReloadedListener(spoon, umlModeler.getUml()));
 
 		BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
 		setLayout(layout);

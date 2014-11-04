@@ -5,6 +5,12 @@ import javax.swing.JOptionPane;
 import opl.modeler.UmlModeler;
 import spoon.reflect.declaration.CtMethod;
 
+/**
+ * Show a dialog where user can refactor an existing Method
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
 public class RefactorMethodDialog extends AddMethodDialog {
 	private CtMethod<?> method;
 

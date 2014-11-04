@@ -2,8 +2,9 @@ package opl.processors.writers;
 
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.reference.CtTypeReference;
+
 /**
- * Processor which refactor a field by changing its name & type
+ * Processor which refactors a field by changing its name & type
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *

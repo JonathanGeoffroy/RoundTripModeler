@@ -2,8 +2,9 @@ package opl.processors.writers;
 
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtTypeReference;
+
 /**
- * Processor which refactor a method by changing its name & type
+ * Processor which refactors a method by changing its name & type
  * 
  * @author Célia Cacciatore, Jonathan Geoffroy
  *

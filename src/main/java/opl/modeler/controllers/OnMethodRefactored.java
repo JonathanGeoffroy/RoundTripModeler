@@ -7,6 +7,12 @@ import opl.modeler.UmlModeler;
 import opl.modeler.dialogboxes.RefactorMethodDialog;
 import spoon.reflect.declaration.CtMethod;
 
+/**
+ * Listener called when user click on "Refact" button for a method.
+ * 
+ * @author Célia Cacciatore, Jonathan Geoffroy
+ *
+ */
 public class OnMethodRefactored implements ActionListener {
 	private UmlModeler modeler;
 	private CtMethod<?> method;
